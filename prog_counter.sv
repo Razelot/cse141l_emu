@@ -1,26 +1,29 @@
-module program_counter #(parameter instruction_width = 9, parameter size = 256)
-                 (input clk 
-				 ,input start
-				 ,input start_address[instruction_width-1:0]
-				 ,input branch
-				 ,input taken
-				 ,input target[instruction_width-1:0]
-                 ,output curr_instruction[instruction_width-1:0]
-                 );
+`timescale 1ns / 1ps
 
-reg[instruction_width-1:0] curr_instruction1;
+module prog_counter #(parameter width = 9)
+(
+  input clk,
+  input start,
+  input start_addr[width-1:0],
+  input branch,
+  input taken,
+  input target[width-1:0],
+  output pc_out[width-1:0]
+  );
 
-assign curr_instruction = curr_instruction1;
+  reg[width-1:0] pc;
 
-always_ff @ (posedge clk)
-begin
-    if (start) begin
-		curr_instruction1 <= start_address;
-	end
-	else if (branch && taken)
-		curr_instruction1 <= target;
-    else
-		curr_instruction1 <= curr_instruction1 + 1;  
-end
-  
-endmodule
+  assign pc_out = pc;
+
+  always_ff @ (posedge clk)
+  begin
+  if (start) begin
+  pc <= start_addr;
+  end
+  else if (branch && taken)
+  pc <= target;
+  else
+  pc <= pc + 1;
+  end
+
+  endmodule

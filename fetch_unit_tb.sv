@@ -1,29 +1,27 @@
 `timescale 1ns / 1ps
 
-module reg_file_tb #(parameter width = 9);
+module fetch_unit_tb #(parameter width = 9);
 
 // inputs
 reg clk;
-reg write;
-reg [$clog2(16)-1:0] rs_addr;
-reg [$clog2(4)-1:0] rt_addr;
-reg [$clog2(4)-1:0] rd_addr;
-reg [width-1:0] rd_in;
+reg start;
+input start_addr[width-1:0];
+input branch;
+input taken;
+input target[width-1:0];
 
 // outputs
-wire [width-1:0] rs_out;
-wire [width-1:0] rt_out;
+wire pc_out[width-1:0];
 
 // instantiate the device under test (dut)
-reg_file dut (
+prog_counter dut (
   .clk,
-  .write,
-  .rs_addr,
-  .rt_addr,
-  .rd_addr,
-  .rd_in,
-  .rs_out,
-  .rt_out
+  .start,
+  .start_addr,
+  .branch,
+  .taken,
+  .target,
+  .pc_out
   );
 
   initial begin
@@ -57,4 +55,4 @@ reg_file dut (
   #50;
   end
 
-  endmodule
+endmodule
