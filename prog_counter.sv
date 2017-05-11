@@ -4,14 +4,14 @@ module prog_counter #(parameter width = 9)
 (
   input clk,
   input start,
-  input start_addr[width-1:0],
+  input [width-1:0] start_addr,
   input branch,
   input taken,
-  input target[width-1:0],
-  output pc_out[width-1:0]
+  input [width-1:0] target,
+  output [width-1:0] pc_out
   );
 
-  reg[width-1:0] pc;
+  reg [width-1:0] pc;
 
   assign pc_out = pc;
 

@@ -14,8 +14,8 @@ reg [width-1:0] rd_in;
 wire [width-1:0] rs_out;
 wire [width-1:0] rt_out;
 
-// instantiate the device under test (dut)
-reg_file dut (
+// instantiate the device under test (DUT)
+reg_file DUT (
   .clk,
   .write,
   .rs_addr,

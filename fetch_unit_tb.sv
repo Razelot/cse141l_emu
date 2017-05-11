@@ -5,16 +5,17 @@ module fetch_unit_tb #(parameter width = 9);
 // inputs
 reg clk;
 reg start;
-input start_addr[width-1:0];
-input branch;
-input taken;
-input target[width-1:0];
+reg [width-1:0] start_addr;
+reg branch;
+reg taken;
+reg [width-1:0] target;
 
 // outputs
-wire pc_out[width-1:0];
+wire [width-1:0] pc_out;
+wire [width-1:0] instr_out;
 
-// instantiate the device under test (dut)
-prog_counter dut (
+// instantiate the device under test
+prog_counter PC (
   .clk,
   .start,
   .start_addr,
@@ -24,27 +25,39 @@ prog_counter dut (
   .pc_out
   );
 
+instr_mem ROM (
+  .instr_addr(pc_out),
+  .instr_out
+  );
+
+
   initial begin
   // initialize inputs
-  write = 0;
-  rs_addr = 0;
-  rt_addr = 0;
-  rd_addr = 0;
-  rd_in = 0;
+  start = 0;
+  branch = 0;
+  taken = 0;
+  target = 0;
 
   // wait 100 ns for global reset to finish
   #100;
 
-  rd_in = 255;
+  start = 1;
+  start_addr = 0;
 
-  #200;
+  #100;
 
-  write = 1;
+  start = 0;
 
-  #100
+  // pc should increment 5 times
+  #500;
 
-  // check the last value written
-  rs_addr = 8;
+  // PC should not branch until branch is taken
+  target = 16;
+
+  // go to ROM address 16 when taken
+  #200
+  branch = 1;
+  taken = 1;
 
   end
 
