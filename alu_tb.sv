@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module alu_tb #(parameter reg_width = 9);
+module alu_tb #(parameter reg_width = 9, parameter op_width = 3);
 
 // inputs
 reg [reg_width-1:0] ra_in;
@@ -20,7 +20,7 @@ alu DUT (
   .op,
   .res_out,
   .car_out,
-  .logic zero,
+  .zero,
   .jump
   );
 
@@ -33,13 +33,30 @@ alu DUT (
   // wait 100 ns for global reset to finish
   #100;
 
+  // TESTING SHIFT_RIGHT_LOGICAL
+  op = 3;
+  ra_in = 'b11110000;
+  rb_in = 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
+  #100;
+  rb_in = rb_in + 1;
+
   end
 
-  always begin
-  clk = 0;
-  #50;
-  clk = 1;
-  #50;
-  end
 
   endmodule

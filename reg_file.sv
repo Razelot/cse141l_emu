@@ -4,8 +4,8 @@ module reg_file #(parameter num_reg = 12, parameter reg_width = 8)
 (
   input clk,
   input write,
-  input [$clog2(16)-1:0] rs_addr,
-  input [$clog2(4)-1:0] rt_addr,
+  input [$clog2(8)-1:0] rs_addr,
+  input [$clog2(8)-1:0] rt_addr,
   input [$clog2(4)-1:0] rd_addr,
   input [reg_width-1:0] rd_in,
   output [reg_width-1:0] rs_out,
