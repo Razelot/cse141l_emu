@@ -8,10 +8,10 @@ module fetch_unit #(parameter width = 9)
   input branch,
   input taken,
   input [width-1:0] target,
-  output [width-1:0] pc_out,
   output [width-1:0] instr_out
   );
 
+wire [width-1:0] pc_out;
 
 // instantiate the device under test
 prog_counter PC (
