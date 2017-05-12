@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module alu #(parameter reg_width = 9, parameter op_width = 3)
+module alu #(parameter reg_width = 8, parameter op_width = 3)
 (
   input [reg_width-1:0] ra_in,
   input [reg_width-1:0] rb_in,
@@ -29,73 +29,73 @@ module alu #(parameter reg_width = 9, parameter op_width = 3)
   car_out <= (127 <= ra_in + rb_in) ? 1'b1 : 1'b0;
   end
   3: begin // SHIFT_RIGHT_LOGICAL
-  car_out = ra_in;
   case (rb_in)
     0 :begin
     car_out <= 8'b00000000;
     end
     1:begin
-    res_out <= res_out >> 1;
-    car_out <= car_out << 7;
+    res_out <= ra_in >> 1;
+    car_out <= ra_in << 7;
     end
     2: begin
-    res_out <= res_out >> 2;
-    car_out <= car_out << 6;
+    res_out <= ra_in >> 2;
+    car_out <= ra_in << 6;
     end
     3: begin
-    res_out <= res_out >> 3;
-    car_out <= car_out << 5;
+    res_out <= ra_in >> 3;
+    car_out <= ra_in << 5;
     end
     4: begin
-    res_out <= res_out >> 4;
-    car_out <= car_out << 4;
+    res_out <= ra_in >> 4;
+    car_out <= ra_in << 4;
     end
     5: begin
-    res_out <= res_out >> 5;
-    car_out <= car_out << 3;
+    res_out <= ra_in >> 5;
+    car_out <= ra_in << 3;
     end
     6: begin
-    res_out <= res_out >> 6;
-    car_out <= car_out << 2;
+    res_out <= ra_in >> 6;
+    car_out <= ra_in << 2;
     end
     7: begin
-    res_out <= res_out >> 7;
-    car_out <= car_out << 1;
+    res_out <= ra_in >> 7;
+    car_out <= ra_in << 1;
     end
     8: begin
-    res_out <= res_out >> 8;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in;
     end
     9: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 1;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 1;
     end
     10: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 2;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 2;
     end
     11: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 3;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 3;
     end
     12: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 4;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 4;
     end
     13: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 5;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 5;
     end
     14: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 6;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 6;
     end
     15: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 7;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 7;
     end
     16: begin
-    res_out <= res_out >> 8;
-    car_out <= car_out >> 8;
+    res_out <= ra_in >> 8;
+    car_out <= ra_in >> 8;
     end
     endcase
     end
@@ -106,67 +106,68 @@ module alu #(parameter reg_width = 9, parameter op_width = 3)
     car_out <= 8'b00000000;
     end
     1:begin
-    res_out <= res_out >>> 1;
-    car_out <= car_out << 7;
+    res_out <= ra_in >>> 1;
+    car_out <= ra_in << 7;
     end
     2: begin
-    res_out <= res_out >>> 2;
-    car_out <= car_out << 6;
+    res_out <= ra_in >>> 2;
+    car_out <= ra_in << 6;
     end
     3: begin
-    res_out <= res_out >>> 3;
-    car_out <= car_out << 5;
+    res_out <= ra_in >>> 3;
+    car_out <= ra_in << 5;
     end
     4: begin
-    res_out <= res_out >>> 4;
-    car_out <= car_out << 4;
+    res_out <= ra_in >>> 4;
+    car_out <= ra_in << 4;
     end
     5: begin
-    res_out <= res_out >>> 5;
-    car_out <= car_out << 3;
+    res_out <= ra_in >>> 5;
+    car_out <= ra_in << 3;
     end
     6: begin
-    res_out <= res_out >>> 6;
-    car_out <= car_out << 2;
+    res_out <= ra_in >>> 6;
+    car_out <= ra_in << 2;
     end
     7: begin
-    res_out <= res_out >>> 7;
-    car_out <= car_out << 1;
+    res_out <= ra_in >>> 7;
+    car_out <= ra_in << 1;
     end
     8: begin
-    res_out <= res_out >>> 8;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in;
     end
     9: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 1;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 1;
     end
     10: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 2;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 2;
     end
     11: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 3;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 3;
     end
     12: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 4;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 4;
     end
     13: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 5;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 5;
     end
     14: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 6;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 6;
     end
     15: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 7;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 7;
     end
     16: begin
-    res_out <= res_out >>> 8;
-    car_out <= car_out >>> 8;
+    res_out <= ra_in >>> 8;
+    car_out <= ra_in >>> 8;
     end
     endcase
   end
