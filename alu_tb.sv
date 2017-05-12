@@ -37,32 +37,49 @@ alu DUT (
   // TESTING SHIFT_RIGHT_LOGICAL
   op = 3;
   ra_in = 8'b11110000;
-  rb_in = 1;
-
-  #100;
-  rb_in = 2;
-
-  #100;
-  rb_in = 3;
-
-  #100;
   rb_in = 4;
 
   #100;
-  rb_in = 5;
+  rb_in = rb_in + 2;
 
   #100;
-  rb_in = 6;
+  rb_in = rb_in + 2;
 
   #100;
-  rb_in = 7;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  // TESTING SHIFT_RIGHT_ARITHMETIC
+  op = 4;
+  ra_in = 8'b11110000;
+  rb_in = 4;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
+
+  #100;
+  rb_in = rb_in + 2;
 
   end
 
-  always begin
-  clk = 0;
-  #50;
-  clk = 1;
-  #50;
-  end
   endmodule
