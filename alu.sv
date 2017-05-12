@@ -11,8 +11,8 @@ module alu #(parameter reg_width = 8, parameter op_width = 3)
   output logic jump
   );
 
-  // for shift overflow
-  logic [reg_width-1:0] mask;
+  // for ADD overflow/underflow
+  reg [reg_width:0] sum;
 
   assign zero = (res_out == 0);
 
@@ -25,8 +25,21 @@ module alu #(parameter reg_width = 8, parameter op_width = 3)
   res_out <= ra_in | rb_in;
   end
   2: begin  // ADD
-  res_out   <= ra_in +  rb_in;
-  car_out <= (128 > ra_in + rb_in) ? 1'b0 : 1'b1;
+  sum = ra_in +  rb_in;
+  case (sum[reg_width:reg_width-1])
+    2'b01 : begin //Overflow
+    res_out <= 127;
+    car_out <= 1;
+    end
+    2'b10 : begin //Underflow
+    res_out <= -128;
+    car_out <= -1;
+    end
+    default: begin // Within range
+    res_out <= ra_in +  rb_in;
+    car_out <= 0;
+    end
+  endcase
   end
   3: begin // SHIFT_RIGHT_LOGICAL
   res_out <= ra_in >> rb_in;
