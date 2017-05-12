@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module reg_file_tb #(parameter width = 9);
+module reg_file_tb #(parameter reg_width = 9);
 
 // inputs
 reg clk;
@@ -8,11 +8,11 @@ reg write;
 reg [$clog2(16)-1:0] rs_addr;
 reg [$clog2(4)-1:0] rt_addr;
 reg [$clog2(4)-1:0] rd_addr;
-reg [width-1:0] rd_in;
+reg [reg_width-1:0] rd_in;
 
 // outputs
-wire [width-1:0] rs_out;
-wire [width-1:0] rt_out;
+wire [reg_width-1:0] rs_out;
+wire [reg_width-1:0] rt_out;
 
 // instantiate the device under test (DUT)
 reg_file DUT (
