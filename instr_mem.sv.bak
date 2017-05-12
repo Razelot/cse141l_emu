@@ -8,7 +8,7 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
   );
 
   // Store instructions in memory
-  logic [instr_width-1:0] rom [rom_size-1:0];
+  logic [$clog2(rom_size):0] rom [instr_width-1:0];
 
   assign instr_out = rom[instr_addr];
 
