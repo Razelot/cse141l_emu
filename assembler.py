@@ -17,53 +17,44 @@ if __name__ == "__main__":
     
     
     infile = sys.argv[1]
-    outfile = sys.arg[2]
+    outfile = sys.argv[2]
 
+    # Fill op codes here
+    op_map = {}
+    op_map["and"] = "000"
+    op_map["slt"] = "000"
+    op_map["or"] = "000"
+    op_map["jr"] = "000"
 
+    op_map["add"] = "001"
+
+    op_map["lw"] = "010"
+    op_map["sw"] = "010"
+
+    op_map["srl"] ="100"
+    op_map["sra"] = "100"
+
+    op_map["tr"] = "011"
+    op_map["addi"] = "101"
+    op_map["beq"] = "110"
+    op_map["halt"] = "111"
+
+    # Sub op codes here
+    subop_map = {}
+    subop_map["and"] = 0
+    subop_map["slt"] = 1
+    subop_map["or"] = 2
+    subop_map["jr"] = 3
+
+    subop_map["lw"] = 0
+    subop_map["sw"] = 1
+
+    subop_map["srl"] = 0
+    subop_map["sra"] = 1
     
-
-    with open(infile, 'r') as f:
-        # Fill op codes here
-        op_map = {}
-        op_map["and"] = "000"
-        op_map["slt"] = "000"
-        op_map["or"] = "000"
-        op_map["jr"] = "000"
-
-        op_map["add"] = "001"
-
-        op_map["lw"] = "010"
-        op_map["sw"] = "010"
-
-        op_map["srl"] ="100"
-        op_map["sra"] = "100"
-
-        op_map["tr"] = "011"
-        op_map["addi"] = "101"
-        op_map["beq"] = "110"
-        op_map["halt"] = "111"
-
-        # Sub op codes here
-        subop_map = {}
-        subop_map["and"] = 0
-        subop_map["slt"] = 1
-        subop_map["or"] = 2
-        subop_map["jr"] = 3
-
-        subop_map["lw"] = 0
-        subop_map["sw"] = 1
-
-        subop_map["srl"] = 0
-        subop_map["sra"] = 1
-
-        # Dummy assembly code
-        f = ["add 1 4 8",
-             "addi 1 5 3",
-             "jr 1 2",
-             "tr 4 5",
-             "lw 1 4",
-             "sw 1 8",]
-
+    with open(infile, 'r') as v:
+        f = v.readlines()
+    print f
         for line in f:
 
             key = line.split()[0]
@@ -87,49 +78,48 @@ if __name__ == "__main__":
 
             # handle specially formatted instructions
             if(key == "add"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2]) - 4
-                rd = int(line.split()[3]) - 8            
+                rs = int(line.split()[1]) - 4
+                rt = int(line.split()[2]) 
+                rd = int(line.split()[3]) - 8
+                mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b') 
 
 
             if(key == "lw"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2]) - 4
-                rd = subop
+                rs = int(line.split()[1]) - 4
+                rd = int(line.split()[2]) - 8
+                mach = op + format(rs, '02b') + format(rd, '02b') + subop
 
             if(key == "sw"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2]) - 8
-                rd = subop
+                rs = int(line.split()[1]) - 4
+                rt = int(line.split()[2])
+                mach = op + format(rs, '02b') + format(rt, '02b') + subop               
 
             if(key == "tr"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2])
+                imm1 = int(line.split()[1])
+                imm2 = int(line.split()[2])
+                mach = op + format(imm1, '03b') + format(imm2, '03b')
 
 
             if(key == "addi"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2]) - 4
-                rd = int(line.split()[3])
-
+                rs = int(line.split()[1]) - 4
+                rt = int(line.split()[2])
+                imm1 = int(line.split()[3]) 
+                mach = op + format(rs, '02b') + format(rt, '02b') + format(imm1, '02b')
 
 
             if(key == "beq"):
-                rs = int(line.split()[1])
-                rt = int(line.split()[2]) - 4
+                rs = int(line.split()[1]) - 4
+                rt = int(line.split()[2])
                 rd = int(line.split()[3]) - 8
-
-
-            else:
-                rs = int(line.split()[1])
-
-
-            # SPLIT BY FORMAT TYPE (R-TYPE, U-TYPE, I-TYPE etc...)
-
-            if(key == "tr"):
-                mach = op + format(rs, '03b') + format(rt, '03b')
-            else:
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
 
+            if(key == "halt"):
+                imm1 = 0
+                mach = op + format(imm1, '06b')
+
+            else:
+                rs = int(line.split()[1]) - 4
+                rt = int(line.split()[2]) 
+                mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
             print line, ": ", mach
