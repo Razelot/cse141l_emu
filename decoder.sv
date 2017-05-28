@@ -20,8 +20,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         case(instruction[1:0])
           2'b00 :	begin // AND: R[rd] <= R[rs] & R[rt]
             alu_op <= 0;
-            rs_addr <= {{2'b00}, {instruction[5:4]}};
-            rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+            rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+            rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
@@ -35,8 +35,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           end
           2'b01 :	begin // SLT: R[rd] <= R[rs] < R[rt]
             alu_op <= 1;
-            rs_addr <= {{2'b00}, {instruction[5:4]}};
-            rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+            rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+            rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
@@ -50,8 +50,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           end
           2'b10 :	begin // OR: R[rd] <= R[rs] | R[rt]
             alu_op <= 2;
-            rs_addr <= {{2'b00}, {instruction[5:4]}};
-            rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+            rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+            rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
@@ -65,8 +65,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           end
           2'b11 :	begin // JR: R[rs] <= R[rs]
             alu_op <= 6;
-              rs_addr <= {{2'b00}, {instruction[5:4]}};
-            rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+              rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+            rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
@@ -83,11 +83,11 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
       3'b001 :	begin
       // check subop code
       case(instruction[1:0])
-        2'b00 :	begin // LW: R[rs] <= M[R[rd]]
+        2'b00 :	begin // LW: R[rs] <= M[R[rt]
           alu_op <= 6;
-          rs_addr <= {{2'b00}, {instruction[3:2]}} + 4; // read address from rd
-          rt_addr <= 8'bXXXXXXXX;
-          rd_addr <= {{2'b00}, {instruction[5:4]}}; // write to rs
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4; // read address from rt
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11; 
           reg_read <= 1;
           reg_write <= 1;
           imm <= 3'bXXX;
@@ -98,10 +98,10 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           mem2reg <= 1;
           halt <= 0;
         end
-        2'b01 :	begin // SW: M[R[rs]] <= R[rd]
+        2'b01 :	begin // SW: M[R[rs]] <= R[rt]
           alu_op <= 1;
-          rs_addr <= {{2'b00}, {instruction[5:4]}};
-          rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
           rd_addr <= 11;
           reg_read <= 1;
           reg_write <= 1;
@@ -120,8 +120,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
       end
       3'b010 :	begin // ADD: R[rd] <= R[rs] + R[rt]
         alu_op <= 3;
-        rs_addr <= {{2'b00}, {instruction[5:4]}};
-        rt_addr <= {{2'b00}, {instruction[3:2]}} + 4;
+        rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+        rt_addr <= {{2'b00}, {instruction[3:2]}};
         rd_addr <= {{2'b00}, {instruction[1:0]}} + 8;
         reg_read <= 1;
         reg_write <= 1;
@@ -135,10 +135,10 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
       end
       3'b011 :	begin // ADDI: R[rd] <= R[rs] + imm
         alu_op <= 3;
-        rs_addr <= {{2'b00}, {instruction[5:4]}};
-        rt_addr <=  8'bXXXXXXXX;
-        rd_addr <= {{2'b00}, {instruction[3:2]}} + 8;
-        reg_read <= 1;
+        rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+        rt_addr <=  {{2'b00}, {instruction[3:2]}} + 8;
+        rd_addr <= {{2'b00}, {instruction[1:0]}}; //this is actually immediate
+        reg_read <= 1; 
         reg_write <= 1;
         imm <= instruction[3:2];
         sel_imm <= 0;
