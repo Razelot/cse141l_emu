@@ -2,12 +2,6 @@ import numpy
 import os
 import sys
 
-# to parpspep use "as a dog".split(" ")
-# this will split each word and produce a list like
-# ['as', 'a', 'dog']
-#check size of list to ccheck argument size
-
-
 
 
 if __name__ == "__main__":
@@ -41,20 +35,19 @@ if __name__ == "__main__":
 
     # Sub op codes here
     subop_map = {}
-    subop_map["and"] = 0
-    subop_map["slt"] = 1
-    subop_map["or"] = 2
-    subop_map["jr"] = 3
+    subop_map["and"] = "00"
+    subop_map["slt"] = "01"
+    subop_map["or"] = "10"
+    subop_map["jr"] = "11"
 
-    subop_map["lw"] = 0
-    subop_map["sw"] = 1
+    subop_map["lw"] = "00"
+    subop_map["sw"] = "01"
 
-    subop_map["srl"] = 0
-    subop_map["sra"] = 1
+    subop_map["srl"] = "00"
+    subop_map["sra"] = "01"
     
     with open(infile, 'r') as v:
         f = v.readlines()
-    print f
         for line in f:
 
             key = line.split()[0]
@@ -67,6 +60,7 @@ if __name__ == "__main__":
             subop = ""
             imm1 = 0
             imm2 = 0
+            mach = 0
 
 
             if key in op_map:
@@ -81,45 +75,44 @@ if __name__ == "__main__":
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2]) 
                 rd = int(line.split()[3]) - 8
-                mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b') 
+                mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
 
-
-            if(key == "lw"):
+            elif(key == "lw"):
                 rs = int(line.split()[1]) - 4
-                rd = int(line.split()[2]) - 8
+                rt = int(line.split()[2]) 
                 mach = op + format(rs, '02b') + format(rd, '02b') + subop
+                
 
-            if(key == "sw"):
+            elif(key == "sw"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop               
+                
 
-            if(key == "tr"):
+            elif(key == "tr"):
                 imm1 = int(line.split()[1])
                 imm2 = int(line.split()[2])
                 mach = op + format(imm1, '03b') + format(imm2, '03b')
-
-
-            if(key == "addi"):
+                
+            elif(key == "addi"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 imm1 = int(line.split()[3]) 
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(imm1, '02b')
-
-
-            if(key == "beq"):
+                
+            elif(key == "beq"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 rd = int(line.split()[3]) - 8
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
-
-            if(key == "halt"):
+                
+            elif(key == "halt"):
                 imm1 = 0
                 mach = op + format(imm1, '06b')
-
+                
             else:
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2]) 
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
-            print line, ": ", mach
+            print line + " : " + mach
