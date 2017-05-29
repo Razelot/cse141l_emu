@@ -1,0 +1,21 @@
+Our ISA and top-level design follows much of the same design and philosophy as
+was described in Lab 1 and 2.
+
+Our assembler is written in python and takes in a text file of assembly 
+language instructions and converts it to machine code. It parses through the 13
+instructions using the opcodes and supopcodes, which are uniquely mapped to 
+each instruction. There are 12 registers. Our rs register is offset by 4, our
+rt register is not offset, and our rd register is offset by 8. These are 
+calculated so that each register access the appropriate register. 
+The immediate is a seperate field that is combined with the op and registers
+to form the 9-bit machine code. Any specially formatted instructions are 
+handled with their own case statement, and the machine code is printed on each
+line.
+
+The decoder.sv file was added to implement the circuit level parsing of each
+instruction. Based on the opcode and subopcode, the appropriate control bits
+are set for the register, alu, data memory, immediate value, and branching.
+
+The top_level.sv file was added to connect the underlying modules, which include
+the decoder, register file, ALU, instruction fetch, and output the next 
+instructions until a halt instruction is read.
