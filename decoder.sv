@@ -113,6 +113,36 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           mem2reg <= 0;
           halt <= 0;
         end
+	2'b00 :	begin // SRL: logical shift
+          alu_op <= 1;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11;
+          reg_read <= 1;
+          reg_write <= 1;
+          imm <= 3'bXXX;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 0;
+        end
+	2'b01 :	begin // SRA: arithmetic shift
+          alu_op <= 1;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11;
+          reg_read <= 1;
+          reg_write <= 1;
+          imm <= 3'bXXX;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 0;
+        end
         default: begin
           // NO OP
         end
