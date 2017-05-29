@@ -136,7 +136,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
       3'b011 :	begin // ADDI: R[rd] <= R[rs] + imm
         alu_op <= 3;
         rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
-        rt_addr <=  {{2'b00}, {instruction[3:2]}} + 8;
+        rt_addr <=  {{2'b00}, {instruction[3:2]}};
         rd_addr <= {{2'b00}, {instruction[1:0]}}; //this is actually immediate
         reg_read <= 1; 
         reg_write <= 1;
@@ -150,9 +150,9 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
       end
       3'b100 :	begin // TR1: R[imm1] <= R[imm2]
         alu_op <= 6;
-        rs_addr <= {{1'b0}, {instruction[2:0]}} + 4;
-        rt_addr <= 8'bXXXXXXXX;
-        rd_addr <= {{1'b0}, {instruction[5:3]}};
+        rs_addr <= {{3'b00}, {instruction[5:3]}};
+        rt_addr <=  {{3'b00}, {instruction[2:0]}};
+        rd_addr <= 11;
         reg_read <= 1;
         reg_write <= 1;
         sel_imm <= 0;
