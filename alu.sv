@@ -21,10 +21,13 @@ module alu #(parameter reg_width = 8, parameter op_width = 3)
   0: begin // AND
   res_out <= ra_in & rb_in;
   end
-  1: begin	// OR
+  1: begin // SLT
+  res_out <= ra_in < rb_in;
+  end
+  2: begin	// OR
   res_out <= ra_in | rb_in;
   end
-  2: begin  // ADD
+  3: begin  // ADD
   sum = ra_in +  rb_in;
   case (sum[reg_width:reg_width-1])
     2'b01 : begin //Overflow
@@ -41,18 +44,18 @@ module alu #(parameter reg_width = 8, parameter op_width = 3)
     end
   endcase
   end
-  3: begin // SHIFT_RIGHT_LOGICAL
+  4: begin // SHIFT_RIGHT_LOGICAL
   res_out <= ra_in >> rb_in;
   car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >> (rb_in - 8);
   end
-  4: begin // SHIFT_RIGHT_ARITHMETIC
+  5: begin // SHIFT_RIGHT_ARITHMETIC
   res_out <= ra_in >>> rb_in;
   car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >>> (rb_in - 8);
   end
-  5: begin  // BEQ
+  6: begin  // BEQ
   jump <= ra_in & rb_in;
   end
-  6: begin // SW, LW
+  7: begin // SW, LW
   res_out <= ra_in;
   end
   endcase

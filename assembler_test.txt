@@ -1,0 +1,12 @@
+and 4 3
+slt 7 3
+or 4 0
+jr 7 0
+add 7 0 11
+lw 7 3
+sw 7 3
+sra 7 3
+tr 7 7
+addi 7 3 3
+beq 7 3 8
+halt 
