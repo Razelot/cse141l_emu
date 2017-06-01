@@ -20,7 +20,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         case(instruction[1:0])
           2'b00 :	begin // AND: R[rd] <= R[rs] & R[rt]
             alu_op <= 0;
-            rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+            rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
             rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
@@ -65,7 +65,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           end
           2'b11 :	begin // JR: R[rs] <= R[rs]
             alu_op <= 6;
-              rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
+            rs_addr <= {{2'b00}, {instruction[5:4]}}+4;
             rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
@@ -87,7 +87,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           alu_op <= 6;
           rs_addr <= {{2'b00}, {instruction[5:4]}} + 4; // read address from rt
           rt_addr <= {{2'b00}, {instruction[3:2]}};
-          rd_addr <= 11; 
+          rd_addr <= 11;
           reg_read <= 1;
           reg_write <= 1;
           imm <= 3'bXXX;
@@ -99,36 +99,6 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
           halt <= 0;
         end
         2'b01 :	begin // SW: M[R[rs]] <= R[rt]
-          alu_op <= 1;
-          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
-          rt_addr <= {{2'b00}, {instruction[3:2]}};
-          rd_addr <= 11;
-          reg_read <= 1;
-          reg_write <= 1;
-          imm <= 3'bXXX;
-          sel_imm <= 0;
-          branch <= 0;
-          mem_write <= 0;
-          mem_read <= 0;
-          mem2reg <= 0;
-          halt <= 0;
-        end
-	2'b00 :	begin // SRL: logical shift
-          alu_op <= 1;
-          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
-          rt_addr <= {{2'b00}, {instruction[3:2]}};
-          rd_addr <= 11;
-          reg_read <= 1;
-          reg_write <= 1;
-          imm <= 3'bXXX;
-          sel_imm <= 0;
-          branch <= 0;
-          mem_write <= 0;
-          mem_read <= 0;
-          mem2reg <= 0;
-          halt <= 0;
-        end
-	2'b01 :	begin // SRA: arithmetic shift
           alu_op <= 1;
           rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           rt_addr <= {{2'b00}, {instruction[3:2]}};
@@ -168,7 +138,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
         rt_addr <=  {{2'b00}, {instruction[3:2]}};
         rd_addr <= {{2'b00}, {instruction[1:0]}}; //this is actually immediate
-        reg_read <= 1; 
+        reg_read <= 1;
         reg_write <= 1;
         imm <= instruction[3:2];
         sel_imm <= 0;
@@ -178,11 +148,11 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         mem2reg <= 0;
         halt <= 0;
       end
-      3'b100 :	begin // TR1: R[imm1] <= R[imm2]
+      3'b110 :	begin // SUB: R[imm2 + 4] <= R[imm2]
         alu_op <= 6;
-        rs_addr <= {{3'b00}, {instruction[5:3]}};
-        rt_addr <=  {{3'b00}, {instruction[2:0]}};
-        rd_addr <= 11;
+        rs_addr <= {{1'b0}, {instruction[5:3]}}; // read upper 8
+        rt_addr <= 8'bXXXXXXXX;
+        rd_addr <= {{1'b0}, {instruction[2:0]}} + 4; // write upper 8
         reg_read <= 1;
         reg_write <= 1;
         sel_imm <= 0;
@@ -192,11 +162,11 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         mem2reg <= 0;
         halt <= 0;
       end
-      3'b100 :	begin // TR2: R[imm1] <= R[imm2]
+      3'b100 :	begin // TR: R[imm2 + 2] <= R[imm2 + 4]
         alu_op <= 6;
-        rs_addr <= {{1'b0}, {instruction[5:3]}};
-        rt_addr <= 8'bXXXXXXXX;
-        rd_addr <= {{1'b0}, {instruction[2:0]}} + 4;
+        rs_addr <= {{3'b00}, {instruction[2:0]}} + 4; // read lower 8
+        rt_addr <=  8'bXXXXXXXX;
+        rd_addr <= {{3'b00}, {instruction[5:3]}}; // write upper 8
         reg_read <= 1;
         reg_write <= 1;
         sel_imm <= 0;
@@ -206,20 +176,72 @@ module decoder #(parameter num_regs = 12, instr_width = 9)(
         mem2reg <= 0;
         halt <= 0;
       end
-      3'b111 :	begin // HALT
-        alu_op <= 1'bX;
-        rs_addr <= 8'bXXXXXXXX;
-        rt_addr <= 8'bXXXXXXXX;
-        rd_addr <= 8'bXXXXXXXX;
-        reg_read <= 0;
-        reg_write <= 0;
-        sel_imm <= 0;
-        branch <= 0;
-        mem_write <= 0;
-        mem_read <= 0;
-        mem2reg <= 0;
-        halt <= 1;
-      end
+      3'b111 :	begin
+      // check subop code
+      case(instruction[1:0])
+        2'b00 :	begin // SRL: logical
+          alu_op <= 1;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11;
+          reg_read <= 1;
+          reg_write <= 1;
+          imm <= 3'bXXX;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 0;
+        end
+        2'b01 :	begin // SRA: arithmetic shift
+          alu_op <= 1;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11;
+          reg_read <= 1;
+          reg_write <= 1;
+          imm <= 3'bXXX;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 0;
+        end
+        2'b01 :	begin // SLL:
+          alu_op <= 1;
+          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+          rt_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= 11;
+          reg_read <= 1;
+          reg_write <= 1;
+          imm <= 3'bXXX;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 0;
+        end
+        2'b11 :	begin // HALT
+          alu_op <= 1'bX;
+          rs_addr <= 8'bXXXXXXXX;
+          rt_addr <= 8'bXXXXXXXX;
+          rd_addr <= 8'bXXXXXXXX;
+          reg_read <= 0;
+          reg_write <= 0;
+          sel_imm <= 0;
+          branch <= 0;
+          mem_write <= 0;
+          mem_read <= 0;
+          mem2reg <= 0;
+          halt <= 1;
+        end
+        default: begin
+          // NO OP
+        end
+      endcase
 		  default: begin
         // NO OP
 			end

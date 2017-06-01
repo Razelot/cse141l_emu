@@ -8,8 +8,8 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print "ERROR: Usage <executable> <infile> <outfile>"
         exit(1)
-    
-    
+
+
     infile = sys.argv[1]
     outfile = sys.argv[2]
 
@@ -20,17 +20,22 @@ if __name__ == "__main__":
     op_map["or"] = "000"
     op_map["jr"] = "000"
 
-    op_map["add"] = "001"
+    op_map["lw"] = "001"
+    op_map["sw"] = "001"
 
-    op_map["lw"] = "010"
-    op_map["sw"] = "010"
+    op_map["add"] = "010"
 
-    op_map["srl"] ="100"
-    op_map["sra"] = "100"
+    op_map["addi"] = "011"
 
-    op_map["tr"] = "011"
-    op_map["addi"] = "101"
+    op_map["sub"] = "100"
+
+    op_map["tr"] = "101"
+
     op_map["beq"] = "110"
+
+    op_map["srl"] ="111"
+    op_map["sra"] = "111"
+    op_map["sll"] = "111"
     op_map["halt"] = "111"
 
     # Sub op codes here
@@ -45,7 +50,7 @@ if __name__ == "__main__":
 
     subop_map["srl"] = "00"
     subop_map["sra"] = "01"
-    
+
     with open(infile, 'r') as v:
         f = v.readlines()
         for line in f:
@@ -73,46 +78,46 @@ if __name__ == "__main__":
             # handle specially formatted instructions
             if(key == "add"):
                 rs = int(line.split()[1]) - 4
-                rt = int(line.split()[2]) 
+                rt = int(line.split()[2])
                 rd = int(line.split()[3]) - 8
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
 
             elif(key == "lw"):
                 rs = int(line.split()[1]) - 4
-                rt = int(line.split()[2]) 
+                rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rd, '02b') + subop
-                
+
 
             elif(key == "sw"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
-                mach = op + format(rs, '02b') + format(rt, '02b') + subop               
-                
+                mach = op + format(rs, '02b') + format(rt, '02b') + subop
+
 
             elif(key == "tr"):
-                imm1 = int(line.split()[1])
-                imm2 = int(line.split()[2])
+                imm1 = int(line.split()[1]) - 1
+                imm2 = int(line.split()[2]) - 5
                 mach = op + format(imm1, '03b') + format(imm2, '03b')
-                
+
             elif(key == "addi"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
-                imm1 = int(line.split()[3]) 
+                imm1 = int(line.split()[3])
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(imm1, '02b')
-                
+
             elif(key == "beq"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 rd = int(line.split()[3]) - 8
                 mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
-                
+
             elif(key == "halt"):
                 imm1 = 0
                 mach = op + format(imm1, '06b')
-                
+
             else:
                 rs = int(line.split()[1]) - 4
-                rt = int(line.split()[2]) 
+                rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
             print line + " : " + mach
