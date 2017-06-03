@@ -39,7 +39,7 @@ module alu #(parameter reg_width = 8, parameter op_width = 4)
   end
   5: begin  // SUB
   res_out <= sub[reg_width-1:0];
-  car_out <= sub[reg_width:reg_width-1] == 2'b10 ? -1 : 0; // UNDERFLOW
+  car_out <= sub[reg_width:reg_width-1] == 2'b10; // UNDERFLOW
   end
   6: begin // SW, LW
   res_out <= ra_in;
