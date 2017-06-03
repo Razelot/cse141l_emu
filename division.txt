@@ -1,0 +1,181 @@
+//Set register to 128
+	addi, t0, 1
+	sra t0, 1	// rc=1000 0000
+	add t0, rc
+//Load value at mem address 128 into t0
+	lw t0, t0
+//Set register to 129
+	addi rc, 1	// rc= 1000 0001
+	add t1, rc
+//Load value at mem address 129 into t1
+	lw t1, t1
+//Set register to 130
+	addi rc, 1	// rc = 1000 0010
+	add t2, rc
+//Load value at mem address 130 into t2
+	lw t2, t2
+//Set register t3 to 16 (max value for the for loop)
+	addi t3, 7
+	addi t3, 7
+	addi t3, 2
+//Set memory address 131 to hold MSB of quotient (initially 0)
+	addi rc, 1	// rc = 1000 0011
+	sw rc, zero
+//Set memory address 132 to hold LSB of quotient (initially 0)
+	addi rc, 1	// rc = 1000 0100
+	sw rc, zero
+//Set memory address 133 to hold i (initially 0)
+	addi rc, 1	// rc = 1000 0101
+	sw rc, zero
+//Set register t4 and t5 to 0 (div value)
+	sll t4, 3
+	sll t4, 3
+	sll t4, 2
+	sll t5, 3
+	sll t5, 3
+	sll t5, 2
+//Begin for loop
+Loop: 
+//clear the rc reg
+sll rc, 3
+	sll rc, 3
+	sll rc, 2 
+//shift dividend left 1
+	add rc, t0 
+slr t1, 1	
+sll t0, 3
+sll t0, 3
+sll t0, 2
+add t0, rc
+//clear rc reg
+sll rc, 3
+sll rc, 3
+sll rc, 2
+//shift div left 1, set LSBit of div to the MSBit of dividend
+add rc, t4
+slr, t5, 1
+sll t4, 3
+sll t4, 3
+sll t4, 2
+add t4, rc	//div[15:8] = {div[14:8], div[7]}
+srr t5, 1	//do this bc t5 was shifted left 1
+sll rc, 3
+sll rc, 3
+sll rc, 2	//clear rc
+add rc, t5	//copy t5 to rc
+add t6, t0	//copy MSByte of Dividend to temp reg
+slr t6, 1
+sll t5, 3
+sll t5, 3
+sll t5, 2
+add t5, rc		//div[7:0] = {div[6:1], dividend[15-i]}
+//Check if div < divisor
+sll rc, 3
+sll rc, 3
+sll rc, 2
+add rc, t4
+lt rc, zero		//is div < MSB divisor(0)? if yes, rc = 255. if no, rc = 0, check LSB
+bzero rc, Label
+add rc, t5
+lt rc, t2		//is div < LSByte of divisor? if yes, rc = 255. if no, rc = 0
+bzero rc, Label	//Branches if div is not < divisor, or if div >=divisor
+//Store t3(16) into memory to free a register
+addi rc, 1
+srr rc, 1 		
+addi rc, 6		// rc = 1000 0110 (134)
+sw rc, t3		
+//Store t2(Divisor) into memory to free another register
+addi rc, 1		// rc = 1000 0111 (135)
+sw rc, t2
+//Transfer quotient from memory into t2 and t3 register
+sll rc, 3
+sll rc, 3
+sll rc, 2
+addi rc, 7
+srr rc, 1 		// rc = 1000 0011 (131)	
+lw t2, rc		// t2 = MSByte of Quotient
+addi rc, 1		// rc = 132
+lw t3, rc		// t3 = LSByte of Quotient
+//Shift quotient left 1, moving in a 0 into LSBit
+sll rc, 3
+sll rc, 3
+sll rc, 2
+add rc, t2
+slr t3, 1
+sll t2, 3
+sll t2, 3
+sll t2, 2
+add t2, rc      
+//Write quotient to memory
+sll rc, 3
+sll rc, 3
+sll rc, 2
+addi rc, 7
+srr rc, 1 		// rc = 1000 0011 (131)
+sw rc, t2
+addi rc, 1		//rc = 132
+sw rc, t3
+//Increment i value (i value is in Mem[133])
+addi rc, 1		//rc = 133
+lw zero, rc		//zero = i
+addi zero, 1
+sw rc, zero		//Store incremented i back in mem
+//Load Divisor and 16 into t2 and t3
+addi rc, 1		//rc =134 
+lw t3, rc
+addi rc, 1		//rc = 135
+lw t2, rc
+//Branch to Loop if i < 16, else done
+bneq zero, t3 Loop
+halt
+//Else set div = div - divisor 
+Label:
+//divisor = -divisor
+not zero
+not t2
+addi t2, 1
+add rc, zero
+//div + (-divisor)
+sll rc, 3
+sll rc, 3
+sll rc, 2
+add t5, t2
+add t4, rc
+add t4, t2
+//Transfer quotient from memory into t2 and t3 register
+sll rc, 3
+sll rc, 3
+sll rc, 2
+addi rc, 7
+srr rc, 1 		// rc = 1000 0011 (131)	
+lw t2, rc		// t2 = MSByte of Quotient
+addi rc, 1		// rc = 132
+lw t3, rc		// t3 = LSByte of Quotient
+//Shift quotient left 1, moving in a 1 into LSBit
+sll rc, 3
+sll rc, 3
+sll rc, 2
+add rc, t2
+slr t3, 1
+sll t2, 3
+sll t2, 3
+sll t2, 2
+add t2, rc   
+//Write quotient to memory
+sll rc, 3
+sll rc, 3
+sll rc, 2
+addi rc, 7
+srr rc, 1 		// rc = 1000 0011 (131)
+sw rc, t2
+addi rc, 1		//rc = 132
+sw rc, t3
+//Increment i value (i value is in Mem[133])
+addi rc, 1		//rc = 133
+lw zero, rc		//zero = i
+addi zero, 1
+sw rc, zero		//Store incremented i back in mem
+//Branch if i < 16
+beq zero, t3
+halt
+
