@@ -12,7 +12,10 @@ module alu #(parameter reg_width = 8, parameter op_width = 4)
   );
 
   // for ADD/SUB overflow/underflow
-  reg [reg_width:0] sum;
+  reg [reg_width:0] add, sub;
+
+  assign add = ra_in + rb_in;
+  assign sub = ra_in - rb_in;
 
   assign zero = (res_out == 0);
 
@@ -22,58 +25,39 @@ module alu #(parameter reg_width = 8, parameter op_width = 4)
   res_out <= ra_in & rb_in;
   end
   1: begin // SLT
-  res_out <= ra_in < rb_in;
+  res_out <= $signed(ra_in) > $signed(rb_in) ? -1 : 0;
   end
-  2: begin	// OR
+  2: begin // OR
   res_out <= ra_in | rb_in;
   end
-  3: begin  // ADD
-  sum = ra_in + rb_in;
-  case (sum[reg_width:reg_width-1])
-    2'b01 : begin //Overflow
-    res_out <= 127;
-    car_out <= 1;
-    end
-    2'b10 : begin //Underflow
-    res_out <= -128;
-    car_out <= -1;
-    end
-    default: begin // Within range
-    res_out <= ra_in +  rb_in;
-    car_out <= 0;
-    end
-  endcase
+  3: begin // NOT
+  res_out <= ~ra_in;
   end
-  4: begin  // SUB
-  sum = ra_in - rb_in;
-  case (sum[reg_width:reg_width-1])
-    2'b01 : begin //Overflow
-    res_out <= 127;
-    car_out <= 1;
-    end
-    2'b10 : begin //Underflow
-    res_out <= -128;
-    car_out <= -1;
-    end
-    default: begin // Within range
-    res_out <= ra_in + rb_in;
-    car_out <= 0;
-    end
-  endcase
+  4: begin // ADD
+  res_out <= add[reg_width-1:0];
+  car_out <= add[reg_width]; // OVERFLOW
   end
-  5: begin // SHIFT_RIGHT_LOGICAL
+  5: begin  // SUB
+  res_out <= sub[reg_width-1:0];
+  car_out <= sub[reg_width:reg_width-1] == 2'b10 ? -1 : 0; // UNDERFLOW
+  end
+  6: begin // SW, LW
+  res_out <= ra_in;
+  end
+  7: begin // BEQ
+  jump <= ra_in == rb_in;
+  end
+  8: begin // SHIFT_RIGHT_LOGICAL
   res_out <= ra_in >> rb_in;
   car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >> (rb_in - 8);
   end
-  6: begin // SHIFT_RIGHT_ARITHMETIC
+  9: begin // SHIFT_RIGHT_ARITHMETIC
   res_out <= ra_in >>> rb_in;
   car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >>> (rb_in - 8);
   end
-  7: begin  // BEQ
-  jump <= ra_in & rb_in;
-  end
-  8: begin // SW, LW
-  res_out <= ra_in;
+  10: begin // SHIFT_LEFT_LOGICAL
+  res_out <= ra_in << rb_in;
+  car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in << (rb_in - 8);
   end
   endcase
   end
