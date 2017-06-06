@@ -25,6 +25,9 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
 
   // ???
   wire taken;
+  
+  assign reg <= mem2reg == 0 ? res_out:data_out
+  assign rt_out = (sel_imm==1) ? imm : rt_out;
 
 
   // instantiate modules
@@ -55,6 +58,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .halt
     );
 
+
   reg_file REG (
     .clk,
     .read(reg_read),
@@ -62,20 +66,29 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .rs_addr,
     .rt_addr,
     .rd_addr,
-    .rd_in(res_out),
+    .rd_in(reg), //assign reg <= mem2reg == 0 ? alu_out:data_out
     .rs_out,
     .rt_out
     );
-
+    
+  
+  
   alu ALU (
     .ra_in(rs_out),
-    .rb_in(rt_out),
+    .rb_in(rt_out), //assign rt_out = (sel_imm==1) ? imm : rt_out;
     .op(alu_op),
     .res_out,
     .car_out,
     .zero,
     .jump
     );
+    
+  //not done
+  data_ram ram (
+    .clk
+    .read
+    .write
+  );
 
 
 always@(posedge clk)
