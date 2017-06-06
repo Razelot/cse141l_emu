@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module alu #(parameter reg_width = 8, parameter op_width = 4)
+module alu #(parameter reg_width = 8, op_width = 4)
 (
   input [reg_width-1:0] ra_in,
   input [reg_width-1:0] rb_in,
