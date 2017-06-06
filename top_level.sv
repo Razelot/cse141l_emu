@@ -19,6 +19,9 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   // ALU outputs
   wire [reg_width-1:0] res_out, car_out;
   wire zero, jump;
+  
+  // data memory outputs
+  wire [7:0] dout;
 
   logic[15:0] instr_count;
   logic[instr_width-1:0] start_addr;
@@ -26,7 +29,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   // ???
   wire taken;
   
-  assign reg <= mem2reg == 0 ? res_out:data_out
+  assign reg = mem2reg == 0 ? res_out:dout
   assign rt_out = (sel_imm==1) ? imm : rt_out;
 
 
@@ -86,8 +89,11 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   //not done
   data_ram ram (
     .clk
+    .addr
     .read
     .write
+    .din
+    .dout
   );
 
 
