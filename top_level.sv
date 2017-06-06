@@ -19,13 +19,13 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   // ALU outputs
   wire [reg_width-1:0] res_out, car_out;
   wire zero, jump;
-  
+
   // data memory outputs
   wire [7:0] dout;
 
   logic[15:0] instr_count;
   logic[instr_width-1:0] start_addr;
-  
+
   assign wb = mem2reg == 0 ? res_out:dout
   assign rt_out = (sel_imm==1) ? imm : rt_out;
 
@@ -50,7 +50,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .reg_write,
     .imm,
     .sel_imm,
-    .branch,
+    // .branch,
     .mem_read,
     .mem_write,
     .mem2reg,
@@ -69,9 +69,9 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .rs_out,
     .rt_out
     );
-    
-  
-  
+
+
+
   alu ALU (
     .ra_in(rs_out),
     .rb_in(rt_out), //assign rt_out = (sel_imm==1) ? imm : rt_out;
@@ -81,8 +81,8 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .zero,
     .jump
     );
-    
-  
+
+
   data_ram RAM (
     .clk
     .read
