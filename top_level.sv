@@ -21,12 +21,12 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire zero, jump;
 
   // data memory outputs
-  wire [7:0] dout;
+  wire [7:0] mem_out;
 
   logic[15:0] instr_count;
   logic[instr_width-1:0] start_addr;
 
-  assign wb = mem2reg == 0 ? res_out:dout
+  assign wb = mem2reg == 0 ? res_out:mem_out;
   assign rt_out = (sel_imm==1) ? imm : rt_out;
 
 
@@ -84,12 +84,12 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
 
 
   data_ram RAM (
-    .clk
-    .read
-    .write
-    .addr(res_out)
-    .din
-    .dout
+    .clk,
+    .read(mem_read),
+    .write(mem_write),
+    .addr(res_out),
+    .din(rs_out),
+    .dout(mem_out)
   );
 
 
