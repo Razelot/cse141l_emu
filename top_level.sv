@@ -26,7 +26,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   logic[15:0] instr_count;
   logic[instr_width-1:0] start_addr;
   
-  assign reg = mem2reg == 0 ? res_out:dout
+  assign wb = mem2reg == 0 ? res_out:dout
   assign rt_out = (sel_imm==1) ? imm : rt_out;
 
 
@@ -65,7 +65,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .rs_addr,
     .rt_addr,
     .rd_addr,
-    .rd_in(reg), //assign reg <= mem2reg == 0 ? alu_out:data_out
+    .rd_in(wb), //assign reg <= mem2reg == 0 ? alu_out:data_out
     .rs_out,
     .rt_out
     );
@@ -82,12 +82,12 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .jump
     );
     
-  //not done
-  data_ram ram (
+  
+  data_ram RAM (
     .clk
-    .addr
     .read
     .write
+    .addr(res_out)
     .din
     .dout
   );
