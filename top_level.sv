@@ -25,9 +25,6 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
 
   logic[15:0] instr_count;
   logic[instr_width-1:0] start_addr;
-
-  // ???
-  wire taken;
   
   assign reg = mem2reg == 0 ? res_out:dout
   assign rt_out = (sel_imm==1) ? imm : rt_out;
@@ -38,8 +35,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .clk,
     .start,
     .start_addr,
-    .branch,
-    .taken,
+    .branch(jump),
     .target(res_out[8:0]),
     .instr_out(instruction)
     );
