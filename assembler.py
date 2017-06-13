@@ -1,17 +1,14 @@
-import numpy
 import os
 import sys
 
-
-
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print "ERROR: Usage <executable> <infile> <outfile>"
+    if len(sys.argv) < 2:
+        print "ERROR: Usage <executable> <infile>"
         exit(1)
 
 
     infile = sys.argv[1]
-    outfile = sys.argv[2]
+    # outfile = sys.argv[2]
 
     # Fill op codes here
     op_map = {}
@@ -53,6 +50,7 @@ if __name__ == "__main__":
 
     with open(infile, 'r') as v:
         f = v.readlines()
+        i = 0
         for line in f:
 
             key = line.split()[0]
@@ -120,4 +118,5 @@ if __name__ == "__main__":
                 rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
-            print line + " : " + mach
+            print "assign rom[" + str(i) + "] = 'b" + mach
+            i = i + 1

@@ -26,9 +26,13 @@ start = 0;
 // wait 100 ns for global reset to finish
 #100
 
-// TESTING 
+// TESTING
 
 start = 1;
+
+#200
+
+start = 0;
 
 end
 
@@ -39,4 +43,4 @@ clk = 1;
 #50;
 end
 
-endmodule 
+endmodule
