@@ -14,7 +14,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire reg_read, reg_write, car_write, sel_imm, branch, mem_read, mem_write, mem2reg;
 
   // REG outputs
-  wire [reg_width-1:0] rt_out, rs_out;
+  wire [reg_width-1:0] rt_out, rs_out, rd_out;
 
   // ALU outputs
   wire [reg_width-1:0] res_out, car_out;
@@ -39,7 +39,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .start_addr,
     .branch(jump),
     .taken(jump),
-    .target(res_out),
+    .target(rd_out),
     .instr_out(instruction)
     );
 
@@ -73,7 +73,8 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .rd_in,
     .car_in(car_out),
     .rs_out,
-    .rt_out
+    .rt_out,
+    .rd_out
     );
 
 
