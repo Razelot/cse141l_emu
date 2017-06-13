@@ -16,12 +16,15 @@ module reg_file #(parameter num_regs = 12, reg_width = 8)
   // cannot write reg[0]
   assign allow_write = rd_addr != 8'b0000 && reg_write;
 
+  assign rt_out = regs[rt_addr];
+  assign rs_out = regs[rs_addr];
+
   always_ff @ (posedge clk ) begin
 
-    if(reg_read) begin
-    rt_out <= regs[rt_addr];
-    rs_out <= regs[rs_addr];
-    end
+    // if(reg_read) begin
+    // rt_out <= regs[rt_addr];
+    // rs_out <= regs[rs_addr];
+    // end
 
     if(allow_write)
     regs[rd_addr] <= rd_in;
