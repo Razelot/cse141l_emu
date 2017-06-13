@@ -47,6 +47,7 @@ if __name__ == "__main__":
 
     subop_map["srl"] = "00"
     subop_map["sra"] = "01"
+    subop_map["sll"] = "10"
 
     with open(infile, 'r') as v:
         f = v.readlines()
@@ -74,7 +75,7 @@ if __name__ == "__main__":
 
 
             # handle specially formatted instructions
-            if(key == "add"):
+            if(key == "add" or key == "sub"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 rd = int(line.split()[3]) - 8
@@ -83,7 +84,7 @@ if __name__ == "__main__":
             elif(key == "lw"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
-                mach = op + format(rs, '02b') + format(rd, '02b') + subop
+                mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
 
             elif(key == "sw"):
@@ -114,6 +115,7 @@ if __name__ == "__main__":
                 mach = op + format(imm1, '06b')
 
             else:
+
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop

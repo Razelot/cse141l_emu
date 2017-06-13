@@ -1,21 +1,11 @@
 addi 11 0 1
-tr 1 11
-tr 2 11
-tr 3 11
-tr 4 11
-tr 5 11
-tr 6 11
 tr 7 11
 tr 8 11
-and 4 3
-slt 7 3
-or 4 0
-jr 7 0
-add 7 0 11
-lw 7 3
-sw 7 3
-sra 7 3
-tr 7 7
-addi 8 3 3
-beq 7 3 8
-halt 
+tr 6 11
+tr 2 8 //$2 = #1
+sll 7 2
+beq 7 3 8 //$7 = #2
+sub 7 2 9
+add 7 2 10
+sw 7 2 //$mem[$7] = $2
+lw 7 1 //$3 = mem[$7]

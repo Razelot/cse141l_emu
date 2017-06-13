@@ -95,7 +95,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .read(mem_read),
     .write(mem_write),
     .addr(res_out),
-    .din(rs_out),
+    .din(rt_out),
     .dout(mem_out)
   );
 

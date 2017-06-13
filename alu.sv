@@ -57,7 +57,7 @@ module alu #(parameter reg_width = 8, op_width = 4)
   end
   10: begin // SHIFT_LEFT_LOGICAL
   res_out <= ra_in << rb_in;
-  car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in << (rb_in - 8);
+  car_out <= (rb_in < 8) ? ra_in >> (8 - rb_in) : ra_in << (rb_in - 8);
   end
   endcase
   end
