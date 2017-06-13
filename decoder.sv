@@ -34,10 +34,10 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             mem2reg <= 0;
             halt <= 0;
           end
-          2'b01 :	begin // SLT: R[11] <= R[rd] < R[rt]
+          2'b01 :	begin // SLT: R[11] <= R[rs] < R[rt]
             alu_op <= 1;
             rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
-            rt_addr <= {{2'b00}, {instruction[3:2]}} + 8;
+            rt_addr <= {{2'b00}, {instruction[3:2]}};
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;

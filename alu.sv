@@ -25,7 +25,7 @@ module alu #(parameter reg_width = 8, op_width = 4)
   res_out <= ra_in & rb_in;
   end
   1: begin // SLT
-  res_out <= $signed(ra_in) > $signed(rb_in) ? -1 : 0;
+  res_out <= $signed(ra_in) < $signed(rb_in) ? -1 : 0;
   end
   2: begin // OR
   res_out <= ra_in | rb_in;
