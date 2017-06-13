@@ -5,7 +5,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
   output logic [1:0] alu_op, // second operand of alu can be rt, rd, or imm
   output logic [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr,
   output logic [reg_width-1:0] imm, // immediate value for alu
-  output logic reg_read, reg_write,
+  output logic reg_read, reg_write, car_write,
   output logic sel_imm, // selector for mux to alu second operand
   // output logic branch,
   output logic mem_read, mem_write,
@@ -25,6 +25,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
+            car_write <= 0;
             imm <= 8'bXXXXXXXX;
             sel_imm <= 0;
             // branch <= 0;
@@ -40,6 +41,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
+            car_write <= 0;
             imm <= 8'bXXXXXXXX;
             sel_imm <= 0;
             // branch <= 0;
@@ -55,6 +57,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
+            car_write <= 0;
             imm <= 8'bXXXXXXXX;
             sel_imm <= 0;
             // branch <= 0;
@@ -70,6 +73,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
             rd_addr <= 11;
             reg_read <= 1;
             reg_write <= 1;
+            car_write <= 0;
             imm <= 8'bXXXXXXXX;
             sel_imm <= 0;
             // branch <= 0;
@@ -90,6 +94,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= {{2'b00}, {instruction[3:2]}};
           reg_read <= 1;
           reg_write <= 1;
+          car_write <= 0;
           imm <= 8'bXXXXXXXX;
           sel_imm <= 0;
           // branch <= 0;
@@ -105,6 +110,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= 4'bXXXX;
           reg_read <= 1;
           reg_write <= 1;
+          car_write <= 0;
           imm <= 8'bXXXXXXXX;
           sel_imm <= 0;
           // branch <= 0;
@@ -125,6 +131,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
         rd_addr <= {{2'b00}, {instruction[1:0]}} + 8;
         reg_read <= 1;
         reg_write <= 1;
+        car_write <= 1;
         imm <= 8'bXXXXXXXX;
         sel_imm <= 0;
         // branch <= 0;
@@ -140,6 +147,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
         rd_addr <= {{2'b00}, {instruction[1:0]}};
         reg_read <= 1;
         reg_write <= 1;
+        car_write <= 1;
         imm <= {{6'b000000}, {instruction[1:0]}};
         sel_imm <= 1;
         // branch <= 0;
@@ -155,6 +163,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
         rd_addr <= {{2'b00}, {instruction[1:0]}} + 8;
         reg_read <= 1;
         reg_write <= 1;
+        car_write <= 1;
         imm <= 8'bXXXXXXXX;
         sel_imm <= 0;
         // branch <= 0;
@@ -170,6 +179,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
         rd_addr <= {{3'b00}, {instruction[5:3]}}; // write upper 8
         reg_read <= 1;
         reg_write <= 1;
+        car_write <= 0;
         sel_imm <= 0;
         // branch <= 0;
         mem_write <= 0;
@@ -184,6 +194,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
         rd_addr <= 4'bXXXX;
         reg_read <= 1;
         reg_write <= 0;
+        car_write <= 0;
         imm <= 8'bXXXXXXXX;
         sel_imm <= 0;
         // branch <= 0;
@@ -202,6 +213,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           reg_read <= 1;
           reg_write <= 1;
+          car_write <= 1;
           imm <= 8'bXXXXXXXX;
           sel_imm <= 0;
           // branch <= 0;
@@ -217,6 +229,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           reg_read <= 1;
           reg_write <= 1;
+          car_write <= 1;
           imm <= 8'bXXXXXXXX;
           sel_imm <= 0;
           // branch <= 0;
@@ -232,6 +245,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           reg_read <= 1;
           reg_write <= 1;
+          car_write <= 1;
           imm <= 8'bXXXXXXXX;
           sel_imm <= 0;
           // branch <= 0;
@@ -247,6 +261,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
           rd_addr <= 8'bXXXXXXXX;
           reg_read <= 0;
           reg_write <= 0;
+          car_write <= 0;
           sel_imm <= 0;
           // branch <= 0;
           mem_write <= 0;

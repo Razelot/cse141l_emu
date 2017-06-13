@@ -3,9 +3,9 @@
 module reg_file #(parameter num_regs = 12, reg_width = 8)
 (
   input clk,
-  input read, write, write_car,
+  input reg_read, reg_write, car_write,
   input [$clog2(num_regs)-1:0] rt_addr, rs_addr, rd_addr,
-  input [reg_width-1:0] rd_in, car_in
+  input [reg_width-1:0] rd_in, car_in,
   output logic [reg_width-1:0] rt_out, rs_out);
 
   // register array
@@ -14,11 +14,11 @@ module reg_file #(parameter num_regs = 12, reg_width = 8)
   logic allow_write;
 
   // cannot write reg[0]
-  assign allow_write = rd_addr != 8'b0000 && write;
+  assign allow_write = rd_addr != 8'b0000 && reg_write;
 
   always_ff @ (posedge clk ) begin
 
-    if(read) begin
+    if(reg_read) begin
     rt_out <= regs[rt_addr];
     rs_out <= regs[rs_addr];
     end
@@ -26,7 +26,7 @@ module reg_file #(parameter num_regs = 12, reg_width = 8)
     if(allow_write)
     regs[rd_addr] <= rd_in;
 
-    if(write_car)
+    if(car_write)
     regs[11] <= car_in;
 
   end
