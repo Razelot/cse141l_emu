@@ -144,7 +144,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         alu_op <= 4;
         rs_addr <= {{2'b00}, {instruction[3:2]}};
         rt_addr <= 4'bXXXX;
-        rd_addr <= {{2'b00}, {instruction[5:4]}};
+        rd_addr <= {{2'b00}, {instruction[5:4]}} + 8;
         reg_read <= 1;
         reg_write <= 1;
         car_write <= 1;

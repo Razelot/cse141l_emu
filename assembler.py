@@ -118,5 +118,5 @@ if __name__ == "__main__":
                 rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
-            print "assign rom[" + str(i) + "] = 'b" + mach
+            print "assign rom[" + str(i) + "] = 'b" + mach + ";"
             i = i + 1
