@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_width = 3) (
+module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_width = 4) (
   input     clk,
   input     start,
   output    halt);
@@ -10,11 +10,11 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   // DEC outputs
   wire [op_width-1:0] alu_op;
   wire [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr;
-  wire [2:0] imm;
+  wire [reg_width-1:0] imm;
   wire reg_read, reg_write, car_write, sel_imm, branch, mem_read, mem_write, mem2reg;
 
   // REG outputs
-  wire rt_out, rs_out;
+  wire [reg_width-1:0] rt_out, rs_out;
 
   // ALU outputs
   wire [reg_width-1:0] res_out, car_out;
@@ -38,6 +38,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .start,
     .start_addr,
     .branch(jump),
+    .taken(jump),
     .target(res_out),
     .instr_out(instruction)
     );

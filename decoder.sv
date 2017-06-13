@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
-module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8 )(
+module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_width = 4)(
   input        [8:0] instruction,
-  output logic [1:0] alu_op, // second operand of alu can be rt, rd, or imm
+  output logic [op_width-1:0] alu_op, // second operand of alu can be rt, rd, or imm
   output logic [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr,
   output logic [reg_width-1:0] imm, // immediate value for alu
   output logic reg_read, reg_write, car_write,

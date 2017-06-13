@@ -1,13 +1,13 @@
 `timescale 1ns / 1ps
 
-module prog_counter #(parameter instr_width = 9)
+module prog_counter #(parameter instr_width = 9, reg_width = 8)
 (
   input clk,
   input start,
   input [instr_width-1:0] start_addr,
   input branch,
   input taken,
-  input [instr_width-1:0] target,
+  input [reg_width-1:0] target,
   output [instr_width-1:0] pc_out
   );
 

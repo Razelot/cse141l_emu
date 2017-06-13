@@ -1,17 +1,17 @@
 `timescale 1ns / 1ps
 
-module fetch_unit #(parameter width = 9)
+module fetch_unit #(parameter instr_width = 9, reg_width = 8)
 (
   input clk,
   input start,
-  input [width-1:0] start_addr,
+  input [instr_width-1:0] start_addr,
   input branch,
   input taken,
-  input [width-1:0] target,
-  output [width-1:0] instr_out
+  input [reg_width-1:0] target,
+  output [instr_width-1:0] instr_out
   );
 
-wire [width-1:0] pc_out;
+wire [instr_width-1:0] pc_out;
 
 // instantiate the device under test
 prog_counter PC (
