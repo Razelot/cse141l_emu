@@ -11,7 +11,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire [op_width-1:0] alu_op;
   wire [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr;
   wire [reg_width-1:0] imm;
-  wire reg_read, reg_write, car_write, sel_imm, mem_read, mem_write, mem2reg;
+  wire reg_read, reg_write, car_write, sel_imm, jump, mem_read, mem_write, mem2reg;
 
   // REG outputs
   wire [reg_width-1:0] rt_out, rs_out, rd_out;
@@ -54,7 +54,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .car_write,
     .imm,
     .sel_imm,
-    // .branch,
+    .jump,
     .mem_read,
     .mem_write,
     .mem2reg,
