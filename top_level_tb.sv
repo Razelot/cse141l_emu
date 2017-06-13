@@ -11,17 +11,17 @@ wire halt;
 
 // instantiate the device under test (DUT)
 
-top DUT (
-	.clk
-	.start
+top_level DUT (
+	.clk,
+	.start,
 	.halt
 );
 
 initial begin
 // initialize inputs
-.clk = 0;
-.start = 0;
-.halt = 0;
+clk = 0;
+start = 0;
+
 
 // wait 100 ns for global reset to finish
 #100
