@@ -190,8 +190,8 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
       3'b110 :	begin // BEQ:
         alu_op <= 7;
         rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
-        rt_addr <= {{2'b00}, {instruction[3:2]}};
-        rd_addr <= {{2'b00}, {instruction[5:4]}} + 8;
+        rt_addr <= {{2'b00}, {instruction[1:0]}} + 8;
+        rd_addr <= {{2'b00}, {instruction[3:2]}};
         reg_read <= 1;
         reg_write <= 0;
         car_write <= 0;
