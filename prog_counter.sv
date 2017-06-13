@@ -20,8 +20,10 @@ module prog_counter #(parameter instr_width = 9, reg_width = 8)
   if (start) begin
   pc <= start_addr;
   end
-  else if (branch && taken)
-  pc <= target;
+  else if (taken)
+  pc <= pc - target;
+  else if (branch)
+  pc <= pc + 2;
   else
   pc <= pc + 1;
   end

@@ -25,11 +25,6 @@ module reg_file #(parameter num_regs = 12, reg_width = 8)
     // ZERO REGISTER
     regs[0] = 'b00000000;
 
-    // if(reg_read) begin
-    // rt_out <= regs[rt_addr];
-    // rs_out <= regs[rs_addr];
-    // end
-
     if(allow_write)
     regs[rd_addr] <= rd_in;
 

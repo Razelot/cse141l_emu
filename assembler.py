@@ -15,7 +15,7 @@ if __name__ == "__main__":
     op_map["and"] = "000"
     op_map["slt"] = "000"
     op_map["or"] = "000"
-    op_map["jr"] = "000"
+    op_map["beq"] = "000"
 
     op_map["lw"] = "001"
     op_map["sw"] = "001"
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     op_map["tr"] = "101"
 
-    op_map["beq"] = "110"
+    op_map["jr"] = "110"
 
     op_map["srl"] ="111"
     op_map["sra"] = "111"
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     subop_map["and"] = "00"
     subop_map["slt"] = "01"
     subop_map["or"] = "10"
-    subop_map["jr"] = "11"
+    subop_map["beq"] = "11"
 
     subop_map["lw"] = "00"
     subop_map["sw"] = "01"
@@ -107,8 +107,12 @@ if __name__ == "__main__":
             elif(key == "beq"):
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
-                rd = int(line.split()[3]) - 8
-                mach = op + format(rs, '02b') + format(rt, '02b') + format(rd, '02b')
+                # rd = int(line.split()[3]) - 8
+                mach = op + format(rs, '02b') + format(rt, '02b') + subop
+
+            elif(key == "jr"):
+                imm1 = int(line.split()[1])
+                mach = op + format(imm1, '06b')
 
             elif(key == "halt"):
                 imm1 = 0

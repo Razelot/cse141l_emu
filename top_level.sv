@@ -11,14 +11,14 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire [op_width-1:0] alu_op;
   wire [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr;
   wire [reg_width-1:0] imm;
-  wire reg_read, reg_write, car_write, sel_imm, branch, mem_read, mem_write, mem2reg;
+  wire reg_read, reg_write, car_write, sel_imm, mem_read, mem_write, mem2reg;
 
   // REG outputs
   wire [reg_width-1:0] rt_out, rs_out, rd_out;
 
   // ALU outputs
   wire [reg_width-1:0] res_out, car_out;
-  wire zero, jump;
+  wire zero, branch;
 
   // data memory outputs
   wire [7:0] mem_out;
@@ -37,9 +37,9 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .clk,
     .start,
     .start_addr,
-    .branch(jump),
+    .branch(branch),
     .taken(jump),
-    .target(rd_out),
+    .target(imm),
     .instr_out(instruction)
     );
 
@@ -61,7 +61,6 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .halt
     );
 
-
   reg_file REG (
     .clk,
     .reg_read,
@@ -78,7 +77,6 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     );
 
 
-
   alu ALU (
     .ra_in(rs_out),
     .rb_in,
@@ -86,7 +84,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .res_out,
     .car_out,
     .zero,
-    .jump
+    .branch
     );
 
 

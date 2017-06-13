@@ -8,7 +8,7 @@ module alu #(parameter reg_width = 8, op_width = 4)
   output reg [reg_width-1:0] res_out,
   output reg [reg_width-1:0] car_out,
   output logic zero,
-  output logic jump
+  output logic branch
   );
 
   // for ADD/SUB overflow/underflow
@@ -45,19 +45,19 @@ module alu #(parameter reg_width = 8, op_width = 4)
   res_out <= ra_in;
   end
   7: begin // BEQ
-  jump <= ra_in == rb_in;
+  branch <= ra_in == rb_in;
   end
   8: begin // SHIFT_RIGHT_LOGICAL
-  res_out <= ra_in >> (rb_in + 1);
-  car_out <= ((rb_in + 1) < 8) ? ra_in << (8 - (rb_in + 1)) : ra_in >> ((rb_in + 1) - 8);
+  res_out <= ra_in >> rb_in;
+  car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >> (rb_in - 8);
   end
   9: begin // SHIFT_RIGHT_ARITHMETIC
-  res_out <= ra_in >>> (rb_in + 1);
-  car_out <= ((rb_in + 1) < 8) ? ra_in << (8 - (rb_in + 1)) : ra_in >>> ((rb_in + 1) - 8);
+  res_out <= ra_in >>> rb_in;
+  car_out <= (rb_in < 8) ? ra_in << (8 - rb_in) : ra_in >>> (rb_in - 8);
   end
   10: begin // SHIFT_LEFT_LOGICAL
-  res_out <= ra_in << (rb_in + 1);
-  car_out <= ((rb_in + 1) < 8) ? ra_in >> (8 - (rb_in + 1)) : ra_in << ((rb_in + 1) - 8);
+  res_out <= ra_in << rb_in;
+  car_out <= (rb_in < 8) ? ra_in >> (8 - rb_in) : ra_in << (rb_in - 8);
   end
   endcase
   end
