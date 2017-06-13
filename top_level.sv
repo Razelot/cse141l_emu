@@ -38,7 +38,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .start,
     .start_addr,
     .branch(jump),
-    .target(res_out[8:0]),
+    .target(res_out),
     .instr_out(instruction)
     );
 
