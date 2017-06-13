@@ -142,9 +142,9 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
       end
       3'b011 :	begin // ADDI: R[rd] <= R[rt] + imm
         alu_op <= 4;
-        rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
+        rs_addr <= {{2'b00}, {instruction[3:2]}};
         rt_addr <= 4'bXXXX;
-        rd_addr <= {{2'b00}, {instruction[1:0]}};
+        rd_addr <= {{2'b00}, {instruction[5:4]}};
         reg_read <= 1;
         reg_write <= 1;
         car_write <= 1;
@@ -156,7 +156,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem2reg <= 0;
         halt <= 0;
       end
-      3'b110 :	begin // SUB: R[rd] <= R[rs] - R[rt]
+      3'b100 :	begin // SUB: R[rd] <= R[rs] - R[rt]
         alu_op <= 5;
         rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
         rt_addr <= {{2'b00}, {instruction[3:2]}};
@@ -172,7 +172,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem2reg <= 0;
         halt <= 0;
       end
-      3'b100 :	begin // TR: R[imm2 + 2] <= R[imm2 + 4]
+      3'b101 :	begin // TR: R[imm2 + 2] <= R[imm2 + 4]
         alu_op <= 6;
         rs_addr <= {{3'b00}, {instruction[2:0]}} + 4; // read lower 8
         rt_addr <=  4'bXXXX;

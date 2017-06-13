@@ -98,10 +98,10 @@ if __name__ == "__main__":
                 mach = op + format(imm1, '03b') + format(imm2, '03b')
 
             elif(key == "addi"):
-                rs = int(line.split()[1]) - 4
+                rd = int(line.split()[1]) - 8
                 rt = int(line.split()[2])
                 imm1 = int(line.split()[3])
-                mach = op + format(rs, '02b') + format(rt, '02b') + format(imm1, '02b')
+                mach = op + format(rd, '02b') + format(rt, '02b') + format(imm1, '02b')
 
             elif(key == "beq"):
                 rs = int(line.split()[1]) - 4
