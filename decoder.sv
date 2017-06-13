@@ -174,9 +174,9 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
       end
       3'b101 :	begin // TR: R[imm2 + 2] <= R[imm2 + 4]
         alu_op <= 6;
-        rs_addr <= {{3'b00}, {instruction[2:0]}} + 4; // read lower 8
+        rs_addr <= {{3'b00}, {instruction[2:0]}} + 5; // read lower 8
         rt_addr <=  4'bXXXX;
-        rd_addr <= {{3'b00}, {instruction[5:3]}}; // write upper 8
+        rd_addr <= {{3'b00}, {instruction[5:3]}} + 1; // write upper 8
         reg_read <= 1;
         reg_write <= 1;
         car_write <= 0;
