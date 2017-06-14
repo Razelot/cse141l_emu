@@ -14,25 +14,14 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
 
   // FOR TESTING
 assign rom[0] = 'b011110001;
-assign rom[1] = 'b101000110;
-assign rom[2] = 'b101001110;
-assign rom[3] = 'b101010110;
-assign rom[4] = 'b101011110;
-assign rom[5] = 'b101100110;
-assign rom[6] = 'b101101110;
-assign rom[7] = 'b101110110;
-assign rom[8] = 'b101111110;
-assign rom[9] = 'b000001100;
-assign rom[10] = 'b000111101;
-assign rom[11] = 'b000000010;
-assign rom[12] = 'b000110011;
-assign rom[13] = 'b010110011;
-assign rom[14] = 'b001110000;
-assign rom[15] = 'b001111101;
-assign rom[16] = 'b111111101;
-assign rom[17] = 'b101110010;
-assign rom[18] = 'b011001111;
-assign rom[19] = 'b110111100;
-assign rom[20] = 'b111000000;
-
+assign rom[1] = 'b101110110;
+assign rom[2] = 'b101111110;
+assign rom[3] = 'b101101110;
+assign rom[4] = 'b101001011;
+assign rom[5] = 'b111111010;
+assign rom[6] = 'b110111100;
+assign rom[7] = 'b100111001;
+assign rom[8] = 'b010111010;
+assign rom[9] = 'b001111001;
+assign rom[10] = 'b001110100;
 endmodule

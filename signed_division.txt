@@ -2,18 +2,19 @@ addi 8 0 0 //r8 = 0 COUNTER
 addi 10 0 3 //r10 = 3
 tr 1 10 //r1 = 3
 tr 5 10 //r5 = 3
-add 5 1 10 // r10 = 3 + 3
+add 5 1 10 // r10 = 6
 tr 5 10 // r5 = 6
-add 5 1 10 //r10 = 6+3
+add 5 1 10 //r10 = 9
 addi 11 0 1 //r11 = 1
-tr 1 11 //r1 = 1
-add 1 0 10 //r10 = 10 COUNTERCOMP
+tr 4 11 //r1 = 1
+tr 3 10 //r3 = 9
+add 4 3 10 //r10 = 10 COUNTERCOMP
 addi 11 0 0 //r11 = 0 VAL
+tr 3 10 //r3 = countercomp
 addi 11 0 1 //increment VAL
 addi 8 0 1 //increment COUNTER
-tr 4 8 //r4 = COUNTER
-tr 3 10 //r3 = COUNTERCOMP
 tr 2 10 //r2 = 10
 addi 9 2 1 //r9 = 11
-beq 4 3 9  //Jump line 12 if r4==r3
+beq 4 3   //if r4==r3, skip two lines
+jr 5 // Jump back 6 lines 
 halt
