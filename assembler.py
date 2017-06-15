@@ -20,7 +20,7 @@ if __name__ == "__main__":
     op_map["lw"] = "001"
     op_map["sw"] = "001"
     op_map["inc"] = "001"
-    op_map["clr"] = "001"
+    op_map["not"] = "001"
 
     op_map["add"] = "010"
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     subop_map["lw"] = "00"
     subop_map["sw"] = "01"
     subop_map["inc"] = "10"
-    subop_map["clr"] = "11"
+    subop_map["not"] = "11"
 
     subop_map["srl"] = "00"
     subop_map["sra"] = "01"
@@ -118,7 +118,7 @@ if __name__ == "__main__":
                 imm1 = bin(((1 << 6) - 1) & imm1)
                 mach = op + format(imm1[2:].zfill(6))
 
-            elif(key == "inc" or key == "clr"):
+            elif(key == "inc" or key == "not"):
                 reg = int(line.split()[1])
                 mach = op + format(reg, '04b') + subop
 
