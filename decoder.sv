@@ -87,11 +87,11 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
       3'b001 :	begin
       // check subop code
       case(instruction[1:0])
-        2'b00 :	begin // LW: R[rt] <= M[R[rs]
+        2'b00 :	begin // LW: R[rs] <= M[R[rt]]
           alu_op <= 6;
-          rs_addr <= {{2'b00}, {instruction[5:4]}} + 4; // read address from rs
+          rs_addr <= {{2'b00}, {instruction[3:2]}}; // read address from rt
           rt_addr <= 4'bXXXX;
-          rd_addr <= {{2'b00}, {instruction[3:2]}};
+          rd_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           reg_clear <= 0;
           reg_write <= 1;
           car_write <= 0;
@@ -103,7 +103,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem2reg <= 1;
           done <= 0;
         end
-        2'b01 :	begin // SW: M[R[rs]] <= R[rt]
+        2'b01 :	begin // SW: M[R[rt]] <= R[rs]
           alu_op <= 6;
           rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
           rt_addr <= {{2'b00}, {instruction[3:2]}};

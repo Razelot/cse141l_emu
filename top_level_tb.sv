@@ -7,14 +7,14 @@ reg clk;
 reg start;
 
 // outputs
-wire halt;
+wire done;
 
 // instantiate the device under test (DUT)
 
 top_level DUT (
 	.clk,
 	.start,
-	.halt
+	.done
 );
 
 initial begin
