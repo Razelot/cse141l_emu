@@ -21,19 +21,26 @@ add 4 3 9 //r9 = MSB(dividend)
 tr 6 9
 srl 6 1 //r6 = 0/1
 tr 2 6 //r2 = 0/1
-beq 2 8 //if r2 == 1, make pos
+beq 2 8
+jr 2 //if r2 != r8
+jr //if r2 == r8
 
-/*beq: r2 == 1. Load LSB of dividend
-  into r. NOT it. Add 1.*/
-addi 8 0 1 //r8 = 129
+/*beq: r2 == 1. Load LSB of dividend.
+  NOT it. Add 1.*/
+tr 8 5
+addi 8 0 1
 tr 3 8 //r3 = 129
-lw 7 3 //r7 = LSB(dividend)
+lw 7 3
 not 7 //r7 = ~LSB(dividend)
-tr 8 7 //r8 = ~LSB(dividend)
+tr 8 7
 addi 8 0 1 //r8 = ~LSB(dividend)+1
+tr 1 12 //r1 = overflow
 
-/*beq: r2 == 1. NOT the MSB of dividend.
-  Adds 1 if carryover from LSB.
+/*beq: r2 == 1. NOT MSB of dividend.
+  Adds carry over from LSB.
+not 9 //r9 = ~MSB(dividend)
+tr 7 9 //r7 = ~MSB(dividend)
+add 7 1 9 //r9 = ~MSB(dividend)+carry
 
 /*beq: r2 == 1. Write M[128] with pos
   value. Write M[1] with neg flag*/
