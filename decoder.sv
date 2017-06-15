@@ -10,7 +10,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
   output logic jump,
   output logic mem_read, mem_write,
   output logic mem2reg,
-  output logic halt);
+  output logic done);
 
 	always_comb	begin
     // check op code
@@ -32,7 +32,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             mem_write <= 0;
             mem_read <= 0;
             mem2reg <= 0;
-            halt <= 0;
+            done <= 0;
           end
           2'b01 :	begin // SLT: R[11] <= R[rs] < R[rt]
             alu_op <= 1;
@@ -48,7 +48,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             mem_write <= 0;
             mem_read <= 0;
             mem2reg <= 0;
-            halt <= 0;
+            done <= 0;
           end
           2'b10 :	begin // OR: R[rd] <= R[rs] | R[rt]
             alu_op <= 2;
@@ -64,7 +64,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             mem_write <= 0;
             mem_read <= 0;
             mem2reg <= 0;
-            halt <= 0;
+            done <= 0;
           end
           2'b11 :	begin // BEQ
           alu_op <= 7;
@@ -80,7 +80,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
           end
         endcase
       end
@@ -101,7 +101,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 1;
           mem2reg <= 1;
-          halt <= 0;
+          done <= 0;
         end
         2'b01 :	begin // SW: M[R[rs]] <= R[rt]
           alu_op <= 6;
@@ -117,7 +117,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 1;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
         2'b10 :	begin // INC
           alu_op <= 4;
@@ -133,7 +133,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
         2'b11 :	begin // NOT
           alu_op <= 3;
@@ -149,7 +149,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
         default: begin
           // NO OP
@@ -170,7 +170,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem_write <= 0;
         mem_read <= 0;
         mem2reg <= 0;
-        halt <= 0;
+        done <= 0;
       end
       3'b011 :	begin // ADDI: R[rd] <= R[rt] + imm
         alu_op <= 4;
@@ -186,7 +186,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem_write <= 0;
         mem_read <= 0;
         mem2reg <= 0;
-        halt <= 0;
+        done <= 0;
       end
       3'b100 :	begin // SUB: R[rd] <= R[rs] - R[rt]
         alu_op <= 5;
@@ -202,7 +202,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem_write <= 0;
         mem_read <= 0;
         mem2reg <= 0;
-        halt <= 0;
+        done <= 0;
       end
       3'b101 :	begin // TR: R[imm2 + 2] <= R[imm2 + 4]
         alu_op <= 6;
@@ -217,7 +217,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem_write <= 0;
         mem_read <= 0;
         mem2reg <= 0;
-        halt <= 0;
+        done <= 0;
       end
       3'b110 :	begin // JR
         alu_op <= 6;
@@ -233,7 +233,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         mem_write <= 0;
         mem_read <= 0;
         mem2reg <= 0;
-        halt <= 0;
+        done <= 0;
       end
       3'b111 :	begin
       // check subop code
@@ -252,7 +252,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
         2'b01 :	begin // SRA: arithmetic shift
           alu_op <= 9;
@@ -268,7 +268,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
         2'b10 :	begin // SLL:
           alu_op <= 10;
@@ -284,9 +284,9 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 0;
+          done <= 0;
         end
-        2'b11 :	begin // HALT
+        2'b11 :	begin // done
           alu_op <= 4'bXXXX;
           rs_addr <= 8'bXXXXXXXX;
           rt_addr <= 8'bXXXXXXXX;
@@ -299,7 +299,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           mem_write <= 0;
           mem_read <= 0;
           mem2reg <= 0;
-          halt <= 1;
+          done <= 1;
         end
         default: begin
           // NO OP

@@ -9,7 +9,7 @@ module reg_file #(parameter num_regs = 13, reg_width = 8)
   output logic [reg_width-1:0] rt_out, rs_out, rd_out);
 
   // register array
-  logic [reg_width-1:0] regs [num_regs-1:0];
+  logic [reg_width-1:0] core [num_regs-1:0];
 
   logic allow_write;
 
@@ -17,21 +17,21 @@ module reg_file #(parameter num_regs = 13, reg_width = 8)
   assign allow_write = rd_addr != 8'b0000 && reg_write;
 
 
-  assign rt_out = regs[rt_addr];
-  assign rs_out = regs[rs_addr];
-  assign rd_out = regs[rd_addr];
+  assign rt_out = core[rt_addr];
+  assign rs_out = core[rs_addr];
+  assign rd_out = core[rd_addr];
 
   always_ff @ (posedge clk ) begin
     // ZERO REGISTER
-    regs[0] = 'b00000000;
+    core[0] = 'b00000000;
 
     if(allow_write && reg_clear)
-    regs[rd_addr] <= 8'b00000000;
+    core[rd_addr] <= 8'b00000000;
     else if(allow_write)
-    regs[rd_addr] <= rd_in;
+    core[rd_addr] <= rd_in;
 
     if(car_write)
-    regs[12] <= car_in;
+    core[12] <= car_in;
 
   end
 

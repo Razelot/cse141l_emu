@@ -2,7 +2,7 @@
 module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_width = 4) (
   input     clk,
   input     start,
-  output    halt);
+  output    done);
 
   // IF outputs
   wire [instr_width-1:0] instruction;
@@ -58,7 +58,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .mem_read,
     .mem_write,
     .mem2reg,
-    .halt
+    .done
     );
 
   reg_file REG (
@@ -88,7 +88,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     );
 
 
-  data_ram RAM (
+  data_mem RAM (
     .clk,
     .read(mem_read),
     .write(mem_write),
@@ -103,7 +103,7 @@ always@(posedge clk)
     instr_count <= 1'b0;
     start_addr <= 1'b0;
   end
-  else if(halt == 0) begin
+  else if(done == 0) begin
     instr_count <= instr_count + 1;
   end
 endmodule
