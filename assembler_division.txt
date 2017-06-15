@@ -1,3 +1,59 @@
+/*Load MSB of dividend*/
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1 //r1 = 7
+inc 5
+sll 5 1
+tr 2 5 //r2 = 128
+lw 5 2 //r5 = MSB(dividend)
+
+tr 6 8
+srl 6 1 //r6 = 0/1
+tr 3 6
+beq 3 9
+jr 2 //if r3 != r9
+jr 22 //if r3 == r9
+
+add 4 2 9
+inc 9
+tr 3 9
+lw 7 3
+not 7
+inc 7 //r7 = ~LSB(dividend)+1
+tr 3 12 //r3 = carry
+not 5 //r5 = ~MSB(dividend)
+add 5 3 9 //r9 = ~MSB(dividend)+carry
+
+add 4 2 8 //r8 = 128
+tr 5 8
+tr 1 9 //r1 = ~MSB(dividend)+carry
+sw 5 1 //M[128] = MSB(dividend)
+inc 5 //r5 = 129
+tr 1 7 //r1 = ~LSB(dividend)+1
+sw 5 1 //M[129] = LSB(dividend)
+inc 4 //r4 = 1
+addi 8 0 0
+inc 8 //r8 = 1
+tr 2 8 //r2 = 1
+sw 4 2 //M[1] = 1
+
+inc 2
+inc 2 //r2 = 130
+lw 5 2 //r5 = M[130]
+addi 8 0 0 /r8 = 0
+tr 3 8 //r3 = 0
+add 5 3 9 //r9 = divisor
+tr 6 9
+srl 6 1 //r6 = 0/1
+tr 2 6 //r2 = 0/1
+beq 2 8
+jr 2 //if r2 != r8
+jr 24 //if r2 == r8
+
 addi 8 0 0
 tr 1 8
 inc 1
@@ -7,39 +63,31 @@ inc 1
 inc 1
 inc 1
 inc 1 //r1 = 7
+inc 8
+tr 2 8
 tr 5 8
-inc 5
-sll 5 1 //r5 = 128
-lw 5 3 //r3 = MSB(dividend)
-
-tr 4 8 //r4 = 0
-add 4 3 9 //r9 = MSB(dividend)
-tr 6 9
-srl 6 1 //r6 = 0/1
-tr 2 6 //r2 = 0/1
-beq 2 8
-jr 2 //if r2 != r8
-jr 21 //if r2 == r8
-
-tr 8 5
-addi 8 0 1
-tr 3 8 //r3 = 129
-lw 7 3
-not 7
-tr 8 7
-addi 8 0 1 //r8 = ~LSB(dividend)+1
-tr 1 12 //r1 = overflow
-
+tr 4 8
+sll 4 1
+inc 4
+inc 4 //r4 = 130
 not 9
-tr 7 9 //r7 = ~MSB(dividend)
-add 7 1 9 //r9 = ~MSB(dividend)+carry
+inc 9 //r9 = ~divisor+1
+tr 1 9 //r1 = ~divsor+1
+sw 4 1 //M[130] = ~divisor+1
+inc 2 //r2 = 2
+inc 5 //r5 = 2
+sw 2 5 //M[2] = 2
 
-tr 1 9 //r1 = ~MSB(dividend)+carry
-sw 5 1 //M[128] = MSB(dividend)
-inc 5 //r5 = 129
-tr 1 8 //r1 = ~LSB(dividend)+1
-sw 5 1 //M[129] = LSB(dividend)
-addi 8 0 1 //r8 = 1
-tr 7 8 //r7 = 1
-tr 2 8 //r2 = 1
-sw 7 2 //M[1] = 1
+addi 8 0 0 //r8 = 0
+addi 10 0 0
+addi 11 0 0
+addi 12 0 0
+tr 1 8
+tr 2 8
+tr 3 8
+tr 4 8
+tr 5 8
+tr 6 8
+tr 7 8
+
+halt
