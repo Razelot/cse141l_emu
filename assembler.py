@@ -58,6 +58,7 @@ if __name__ == "__main__":
         i = 0
         for line in f:
 
+            # ignore empty line
             try:
                 key = line.split()[0]
             except:
@@ -73,6 +74,9 @@ if __name__ == "__main__":
             imm2 = 0
             mach = 0
 
+            # comments
+            if key[0:2] == "//":
+                continue
 
             if key in op_map:
                 op = op_map[key]
