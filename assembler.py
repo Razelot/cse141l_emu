@@ -20,7 +20,7 @@ if __name__ == "__main__":
     op_map["lw"] = "001"
     op_map["sw"] = "001"
     op_map["inc"] = "001"
-    op_map["clr"] = "001"
+    op_map["not"] = "001"
 
     op_map["add"] = "010"
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     subop_map["lw"] = "00"
     subop_map["sw"] = "01"
     subop_map["inc"] = "10"
-    subop_map["clr"] = "11"
+    subop_map["not"] = "11"
 
     subop_map["srl"] = "00"
     subop_map["sra"] = "01"
