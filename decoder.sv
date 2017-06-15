@@ -123,7 +123,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           alu_op <= 4;
           rs_addr <= instruction[5:2];
           rt_addr <= 4'bXXXX;
-          rd_addr <= 4'bXXXX;
+          rd_addr <= instruction[5:2];
           reg_clear <= 0;
           reg_write <= 1;
           car_write <= 0;
