@@ -1,20 +1,47 @@
-addi 8 0 0 //r8 = 0 COUNTER
-addi 10 0 3 //r10 = 3
-tr 1 10 //r1 = 3
-tr 5 10 //r5 = 3
-add 5 1 10 // r10 = 6
-tr 5 10 // r5 = 6
-add 5 1 10 //r10 = 9
-addi 11 0 1 //r11 = 1
-tr 4 11 //r1 = 1
-tr 3 10 //r3 = 9
-add 4 3 10 //r10 = 10 COUNTERCOMP
-addi 11 0 0 //r11 = 0 VAL
-tr 3 10 //r3 = countercomp
-addi 11 0 1 //increment VAL
-addi 8 0 1 //increment COUNTER
-tr 2 10 //r2 = 10
-addi 9 2 1 //r9 = 11
-beq 4 3   //if r4==r3, skip two lines
-jr 5 // Jump back 6 lines 
+/*Loads the MSB of the dividend into
+  r5*/
+addi 8 0 1 //r8 = 1
+tr 4 8 //r4 = 1
+addi 8 0 3 //r8 = 4
+addi 8 0 3 //r8 = 7
+tr 1 8 //r1 = 7
+sll 4 1 //r4 = 128
+add 4 3 8 //r8 = 128
+tr 3 8 //r3 = 128
+lw 5 3 //r5 = MSB(dividend)
+
+/*Checks if MSB of dividend is
+  negative*/
+tr 6 5 //r6 = MSB(dividend)
+srl 6 1 //r4 = 0/1
+tr 2 6 //r2 = 0/1
+beq 2 9 //if r2 == 1, make pos
+
+/*beq: r2 == 1. Load LSB of dividend
+  into r. NOT it. Add 1.*/
+addi 8 0 1 //r8 = 129
+tr 3 8 //r3 = 129
+lw 7 3 //r7 = LSB(dividend)
+not 7 //r7 = ~LSB(dividend)
+tr 8 7 //r8 = ~LSB(dividend)
+addi 8 0 1 //r8 = ~LSB(dividend)+1
+
+/*beq: r2 == 1. NOT the MSB of dividend.
+  Adds 1 if carryover from LSB.
+
+/*beq: r2 == 1. Write M[128] with pos
+  value. Write M[1] with neg flag*/
+
+/* beq: r2 == 0.
+
+/*Checks if MSB of divisor is neg*/
+
+/*beq: == 1. NOT the divisor. Add 1.
+
+/*beq: == 1. Write M[130] with pos
+  divisor. Write M[2] with neg flag*/
+
+/*beq: == 0.
+
+/*Loop Setup. Clear all registers.*/
 halt
