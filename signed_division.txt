@@ -22,7 +22,7 @@ srl 6 1 //r6 = 0/1
 tr 2 6 //r2 = 0/1
 beq 2 8
 jr 2 //if r2 != r8
-jr 19 //if r2 == r8
+jr 21 //if r2 == r8
 
 /*beq: MSB is Negative. Load LSB of
   dividend. NOT it. Add 1.*/
@@ -44,9 +44,11 @@ add 7 1 9 //r9 = ~MSB(dividend)+carry
 /*beq: MSB is Negative. Write M[128] and
   M[129] with positive value. Write M[1]
   with negative flag*/
-sw 5 8 //M[128] = MSB(dividend)
+tr 1 9 //r1 = ~MSB(dividend)+carry
+sw 5 1 //M[128] = MSB(dividend)
 inc 5 //r5 = 129
-sw 5 9 //M[129] = LSB(dividend)
+tr 1 8 //r1 = ~LSB(dividend)+1
+sw 5 1 //M[129] = LSB(dividend)
 addi 8 0 1 //r8 = 1
 tr 7 8 //r7 = 1
 tr 2 8 //r2 = 1

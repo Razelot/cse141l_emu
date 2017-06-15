@@ -32,4 +32,26 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
   assign rom[16] = 'b111100100;
   assign rom[17] = 'b101001001;
   assign rom[18] = 'b000100011;
+  assign rom[19] = 'b110000010;
+  assign rom[20] = 'b110010101;
+  assign rom[21] = 'b101111000;
+  assign rom[22] = 'b011000001;
+  assign rom[23] = 'b101010011;
+  assign rom[24] = 'b001111100;
+  assign rom[25] = 'b001011111;
+  assign rom[26] = 'b101111010;
+  assign rom[27] = 'b011000001;
+  assign rom[28] = 'b101000111;
+  assign rom[29] = 'b001100111;
+  assign rom[30] = 'b101110100;
+  assign rom[31] = 'b010110101;
+  assign rom[32] = 'b101000100;
+  assign rom[33] = 'b001010101;
+  assign rom[34] = 'b001010110;
+  assign rom[35] = 'b101000011;
+  assign rom[36] = 'b001010101;
+  assign rom[37] = 'b011000001;
+  assign rom[38] = 'b101110011;
+  assign rom[39] = 'b101001011;
+  assign rom[40] = 'b001111001;
 endmodule
