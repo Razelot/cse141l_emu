@@ -1,0 +1,26 @@
+// r4 = i
+// calc xnew
+inc 1 // r1 = 1
+lw 5 1 // r5 = xtemp1
+tr 2  5 // r2 = xtemp1
+inc 1 // r1 = 2
+lw 5 1 // r5 = xtemp0
+tr 3 5 // r3 = xtemp0
+
+// r5 is junk
+inc 1 // r1 = 3
+lw 6 1 // r6 = ytemp1
+inc 1 // r1 = 4
+lw 7 1 // r7 = ytemp0
+
+// check if ytemp is negative
+slt 6 0 // ytemp1 negative?
+beq 0 11 // if ytemp1 < 0: r11 = 0
+jr 5 // go to positive loop
+// negative loop
+
+inc 1
+inc 1
+inc 1
+inc 1
+halt

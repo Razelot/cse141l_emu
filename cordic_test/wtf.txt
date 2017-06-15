@@ -1,0 +1,407 @@
+// clear registers
+sll $t0, 8 // $zero
+sll $t1, 8 // xynew_msb
+sll $t2, 8 // xynew_lsb
+sll $t3, 8 // xytemp_msb
+sll $t4, 8 // xytemp_lsb
+sll $t5, 8 // tmp
+sll $t6, 8 // i
+sll $t7, 8 // $rc (accumulator)
+
+// put memory address
+addi $t1, 1
+addi $t2, 2
+addi $t3, 3
+addi $t4, 4
+
+// load from memory
+// X
+lw $t1, $t1
+lw $t2, $t2
+
+// Y
+lw $t3, $t3
+lw $t4, $t4
+
+// initialize xtemp and ytemp, store in memory 5-8
+// M[5] = xtemp_msb
+addi $t5, 5
+sw $t1, $t5
+// M[6] = xtemp_lsb
+addi $t5, 1
+sw $t2, $t5
+// M[7] = ytemp_msb
+addi $t5, 1
+sw $t3, $t5
+// M[8] = ytemp_lsb
+addi $t5, 1
+sw $t4, $t5
+
+// M[9] = ttemp_msb
+addi $t5, 1
+sw $t0, $t5
+// M[10] = ttemp_lsb
+addi $t5, 1
+sw $t0, $t5
+
+loop:
+
+// R[$t1] = xtemp_msb
+sll $t5, 8
+addi $t5, 5
+lw $t3, $t5
+// R[$t2] = xtemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// check Y < 0
+sll $t7, 8
+sll $t5, 8
+addi $t5, 8
+lw $t5, $t5
+slr $t5, 1
+
+// if R[$t7] == '00000001': Y is negative
+sla $t3, 8
+
+// R[$t7] = sign-bit_Y; R[$t5] = 0;
+lt $t5, $t7
+bzero $t5, neg
+
+neg:
+
+// x_new  = x_temp + ((-y_temp)>>>i);
+
+// R[$t3] = ytemp_msb
+sll $t5, 8
+addi $t5, 7
+lw $t3, $t5
+// R[$t4] = ytemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// -ytemp
+not $t3
+not $t4
+addi $t3, 1
+addi $t4, carry
+
+// R[$t5] = j = i
+sll $t5, 8
+add $t5, $t6
+// R[$t7] = R[$t4]
+sll $t7, 8
+add $t7, $t4
+
+// (-y_temp>>>i);
+yloop_neg:
+bzero $t5, yloop_neg_end
+srra $t3, 1
+addi $t5, -1
+bzero $t0, yloop_neg
+
+yloop_neg_end:
+// R[$t4] = R[$t7]
+add $t4, $t7
+sll $t7, 8
+// x_temp + ((-y_temp)>>>i)
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// R[$t3] = xtemp_msb
+sll $t5, 8
+addi $t5, 5
+lw $t3, $t5
+// R[$t4] = xtemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// M[5] = xnew_msb
+sll $t5, 8
+addi $t5, 5
+sw $t1, $t5
+
+// M[6] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// y_new  = y_temp + (x_temp>>>i);
+
+// R[$t1] = ytemp_msb
+sll $t5, 8
+addi $t5, 7
+lw $t3, $t5
+// R[$t2] = ytemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// R[$t5] = j = i
+sll $t5, 8
+add $t5, $t6
+// R[$t7] = R[$t4]
+sll $t7, 8
+add $t7, $t4
+
+// (x_temp>>>i);
+xloop_neg:
+bzero $t5, xloop_neg_end
+srra $t3, 1
+addi $t5, -1
+bzero $t0, xloop_neg
+
+xloop_neg_end:
+// R[$t4] = R[$t7]
+add $t4, $t7
+sll $t7, 8
+// y_temp + (x_temp>>>i);
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// M[7] = xnew_msb
+sll $t5, 8
+addi $t5, 7
+sw $t1, $t5
+
+// M[8] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// t_new  = t_temp - (1<<(11-i));
+
+// R[$t1] = ttemp_msb
+sll $t5, 8
+addi $t5, 9
+lw $t3, $t5
+// R[$t2] = ttemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// R[$t5] = j = 11 - i
+sll $t5, 8
+add $t5, $t6
+not $t5
+addi $t5, 1
+addi $t5, 11
+
+// {R[$t3], R[$t4]} = '1'
+sll $t3, 8
+sll $t4, 8
+addi $t4, 1
+
+// R[$t7] = R[$t3]
+sll $t7, 8
+add $t7, $t3
+
+// (1<<(11-i));
+tloop_neg:
+bzero $t5, tloop_neg_end
+slr $t4, 1
+addi $t5, -1
+bzero $t0, tloop_neg
+
+tloop_neg_end:
+
+// R[$t3] = R[$t7]
+add $t3, $t7
+sll $t7, 8
+
+// -(1<<(11-i))
+not $t3
+not $t4
+addi $t3, 1
+addi $t4, carry
+
+// t_temp - (1<<(11-i));
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// M[9] = xnew_msb
+sll $t5, 8
+addi $t5, 9
+sw $t1, $t5
+
+// M[10] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// back to loop if i < 12
+addi $t6, 1
+sll $t5, 8
+addi $t5, $t6
+addi $t7, 12
+lt $t5, $t7
+bzero $t5, end
+bzero $t0, loop
+
+pos:
+
+// x_new  = x_temp + (y_temp>>>i);
+
+// R[$t3] = ytemp_msb
+sll $t5, 8
+addi $t5, 7
+lw $t3, $t5
+// R[$t4] = ytemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// R[$t5] = j = i
+sll $t5, 8
+add $t5, $t6
+// R[$t7] = R[$t4]
+sll $t7, 8
+add $t7, $t4
+
+// (y_temp>>>i);
+yloop_pos:
+bzero $t5, yloop_pos_end
+srra $t3, 1
+addi $t5, -1
+bzero $t0, yloop_pos
+
+yloop_pos_end:
+// R[$t4] = R[$t7]
+add $t4, $t7
+sll $t7, 8
+// x_temp + ((y_temp)>>>i)
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// R[$t3] = xtemp_msb
+sll $t5, 8
+addi $t5, 5
+lw $t3, $t5
+// R[$t4] = xtemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// M[5] = xnew_msb
+sll $t5, 8
+addi $t5, 5
+sw $t1, $t5
+
+// M[6] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// y_new  = y_temp + ((-x_temp)>>>i);
+
+// R[$t1] = ytemp_msb
+sll $t5, 8
+addi $t5, 7
+lw $t3, $t5
+// R[$t2] = ytemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// -xtemp
+not $t3
+not $t4
+addi $t3, 1
+addi $t4, carry
+
+// R[$t5] = j = i
+sll $t5, 8
+add $t5, $t6
+// R[$t7] = R[$t4]
+sll $t7, 8
+add $t7, $t4
+
+// ((-x_temp)>>>i);
+xloop_pos:
+bzero $t5, xloop_pos_end
+srra $t3, 1
+addi $t5, -1
+bzero $t0, xloop_pos
+
+xloop_pos_end:
+// R[$t4] = R[$t7]
+add $t4, $t7
+sll $t7, 8
+// y_temp + (x_temp>>>i);
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// M[7] = xnew_msb
+sll $t5, 8
+addi $t5, 7
+sw $t1, $t5
+
+// M[8] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// t_new  = t_temp - (1<<(11-i));
+
+// R[$t1] = ttemp_msb
+sll $t5, 8
+addi $t5, 9
+lw $t3, $t5
+// R[$t2] = ttemp_lsb
+addi $t5, 1
+lw $t4, $t5
+
+// R[$t5] = j = 11 - i
+sll $t5, 8
+add $t5, $t6
+not $t5
+addi $t5, 1
+addi $t5, 11
+
+// {R[$t3], R[$t4]} = '1'
+sll $t3, 8
+sll $t4, 8
+addi $t4, 1
+
+// R[$t7] = R[$t3]
+sll $t7, 8
+add $t7, $t3
+
+// (1<<(11-i));
+tloop_pos:
+bzero $t5, tloop_pos_end
+slr $t4, 1
+addi $t5, -1
+bzero $t0, tloop_pos
+
+tloop_pos_end:
+
+// R[$t3] = R[$t7]
+add $t3, $t7
+sll $t7, 8
+
+// t_temp + (1<<(11-i));
+add $t2, $t4 // lsb
+add $t1, $t3 // msb
+
+// M[9] = xnew_msb
+sll $t5, 8
+addi $t5, 9
+sw $t1, $t5
+
+// M[10] = xnew_lsb
+addi $t5, 1
+sw $t2, $t5
+
+// back to loop if i < 12
+addi $t6, 1
+sll $t5, 8
+addi $t5, $t6
+addi $t7, 12
+lt $t5, $t7
+bzero $t5, end
+bzero $t0, loop
+
+end:
+// Put t value on M[7] and M[8]
+sll $t5, 8
+addi $t5, 9
+lw $t1, $t5
+addi $t5, 10
+lw $t2, $t5
+
+sll $t5, 8
+addi $t5, 7
+sw $t1, $t5
+addi $t5, 10
+sw $t2, $t5

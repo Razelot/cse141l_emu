@@ -22,7 +22,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             alu_op <= 0;
             rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
             rt_addr <= {{2'b00}, {instruction[3:2]}};
-            rd_addr <= 12;
+            rd_addr <= 11;
             reg_clear <= 0;
             reg_write <= 1;
             car_write <= 0;
@@ -38,7 +38,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             alu_op <= 1;
             rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
             rt_addr <= {{2'b00}, {instruction[3:2]}};
-            rd_addr <= 12;
+            rd_addr <= 11;
             reg_clear <= 0;
             reg_write <= 1;
             car_write <= 0;
@@ -54,7 +54,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
             alu_op <= 2;
             rs_addr <= {{2'b00}, {instruction[5:4]}} + 4;
             rt_addr <= {{2'b00}, {instruction[3:2]}};
-            rd_addr <= 12;
+            rd_addr <= 11;
             reg_clear <= 0;
             reg_write <= 1;
             car_write <= 0;
