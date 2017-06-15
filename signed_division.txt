@@ -1,5 +1,7 @@
 /*Loads the MSB of the dividend into
   r5*/
+addi 8 0 0 //r8 = 0
+tr 1 8
 inc 1
 inc 1
 inc 1
@@ -7,17 +9,19 @@ inc 1
 inc 1
 inc 1
 inc 1 //r1 = 7
+tr 5 8
 inc 5
-sll 5 1
-tr 3 5 //r3 = 128
-lw 5 3 //r5 = MSB(dividend)
+sll 5 1 //r5 = 128
+lw 5 3 //r3 = MSB(dividend)
 
 /*Checks if MSB of dividend is
   negative*/
-tr 6 5 //r6 = MSB(dividend)
-srl 6 1 //r4 = 0/1
+tr 4 8 //r4 = 0
+add 4 3 9 //r9 = MSB(dividend)
+tr 6 9
+srl 6 1 //r6 = 0/1
 tr 2 6 //r2 = 0/1
-beq 2 9 //if r2 == 1, make pos
+beq 2 8 //if r2 == 1, make pos
 
 /*beq: r2 == 1. Load LSB of dividend
   into r. NOT it. Add 1.*/
