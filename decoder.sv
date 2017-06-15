@@ -227,7 +227,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         reg_clear <= 0;
         reg_write <= 0;
         car_write <= 0;
-        imm <= {{2'b00}, {instruction[5:0]}};
+        imm <= {instruction[5], instruction[5], {instruction[5:0]}};
         sel_imm <= 0;
         jump <= 1;
         mem_write <= 0;

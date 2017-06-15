@@ -7,7 +7,7 @@ module prog_counter #(parameter instr_width = 9, reg_width = 8)
   input [instr_width-1:0] start_addr,
   input branch,
   input taken,
-  input [reg_width-1:0] target,
+  input signed [reg_width-1:0] target,
   output [instr_width-1:0] pc_out
   );
 
@@ -21,7 +21,7 @@ module prog_counter #(parameter instr_width = 9, reg_width = 8)
   pc <= start_addr;
   end
   else if (taken)
-  pc <= pc + $signed(target);
+  pc <= $signed(pc) + $signed(target);
   else if (branch)
   pc <= pc + 2;
   else
