@@ -64,6 +64,10 @@ if __name__ == "__main__":
             except:
                 continue
 
+            # comments
+            if key[0:2] == "//":
+                continue
+
             op = ""
             rs = 0
             rt = 0
@@ -73,10 +77,6 @@ if __name__ == "__main__":
             imm1 = 0
             imm2 = 0
             mach = 0
-
-            # comments
-            if key[0:2] == "//":
-                continue
 
             if key in op_map:
                 op = op_map[key]
