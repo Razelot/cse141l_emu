@@ -121,7 +121,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         end
         2'b10 :	begin // INC
           alu_op <= 4;
-          rs_addr <= {{2'b00}, {instruction[5:2]}};
+          rs_addr <= instruction[5:2];
           rt_addr <= 4'bXXXX;
           rd_addr <= 4'bXXXX;
           reg_clear <= 0;
@@ -139,7 +139,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
           alu_op <= 6;
           rs_addr <= 4'bXXXX;
           rt_addr <= 4'bXXXX;
-          rd_addr <= {{2'b00}, {instruction[5:2]}};
+          rd_addr <= instruction[5:2];
           reg_clear <= 1;
           reg_write <= 1;
           car_write <= 0;
