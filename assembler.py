@@ -58,7 +58,10 @@ if __name__ == "__main__":
         i = 0
         for line in f:
 
-            key = line.split()[0]
+            try:
+                key = line.split()[0]
+            except:
+                continue
 
             op = ""
             rs = 0
