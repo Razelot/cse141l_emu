@@ -13,15 +13,13 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
   assign instr_out = rom[instr_addr];
 
   // FOR TESTING
-assign rom[0] = 'b001000110;
-assign rom[1] = 'b001000110;
-assign rom[2] = 'b001000110;
-assign rom[3] = 'b001000110;
-assign rom[4] = 'b001000110;
-assign rom[5] = 'b001000110;
-assign rom[6] = 'b001000110;
-assign rom[7] = 'b001010110;
-assign rom[8] = 'b111010110;
-assign rom[9] = 'b101010000;
-assign rom[10] = 'b001011100;
+assign rom[0] = 'b011000001;
+assign rom[1] = 'b101011011;
+assign rom[2] = 'b011000011;
+assign rom[3] = 'b011000011;
+assign rom[4] = 'b101000011;
+assign rom[5] = 'b111000110;
+assign rom[6] = 'b010001100;
+assign rom[7] = 'b101010011;
+assign rom[8] = 'b001011100;
 endmodule
