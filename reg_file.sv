@@ -1,9 +1,9 @@
 `timescale 1ns / 1ps
 
-module reg_file #(parameter num_regs = 12, reg_width = 8)
+module reg_file #(parameter num_regs = 13, reg_width = 8)
 (
   input clk,
-  input reg_read, reg_write, car_write,
+  input reg_clear, reg_write, car_write,
   input [$clog2(num_regs)-1:0] rt_addr, rs_addr, rd_addr,
   input [reg_width-1:0] rd_in, car_in,
   output logic [reg_width-1:0] rt_out, rs_out, rd_out);
@@ -25,11 +25,13 @@ module reg_file #(parameter num_regs = 12, reg_width = 8)
     // ZERO REGISTER
     regs[0] = 'b00000000;
 
-    if(allow_write)
+    if(allow_write && reg_clear)
+    regs[rd_addr] <= 8'b00000000;
+    else if(allow_write)
     regs[rd_addr] <= rd_in;
 
     if(car_write)
-    regs[11] <= car_in;
+    regs[12] <= car_in;
 
   end
 

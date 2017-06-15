@@ -11,7 +11,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire [op_width-1:0] alu_op;
   wire [$clog2(num_regs)-1:0] rs_addr, rt_addr, rd_addr;
   wire [reg_width-1:0] imm;
-  wire reg_read, reg_write, car_write, sel_imm, jump, mem_read, mem_write, mem2reg;
+  wire reg_clear, reg_write, car_write, sel_imm, jump, mem_read, mem_write, mem2reg;
 
   // REG outputs
   wire [reg_width-1:0] rt_out, rs_out, rd_out;
@@ -29,7 +29,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   // MUX
   wire [reg_width-1:0] rb_in, rd_in;
   assign rb_in = sel_imm ? imm : rt_out;
-  assign rd_in = ~mem2reg ? res_out:mem_out;
+  assign rd_in = mem2reg ? mem_out:res_out;
 
 
   // instantiate modules
@@ -49,7 +49,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
     .rs_addr,
     .rt_addr,
     .rd_addr,
-    .reg_read,
+    .reg_clear,
     .reg_write,
     .car_write,
     .imm,
@@ -63,7 +63,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
 
   reg_file REG (
     .clk,
-    .reg_read,
+    .reg_clear,
     .reg_write,
     .car_write,
     .rs_addr,
