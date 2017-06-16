@@ -1,10 +1,10 @@
 // A synchronous instruction memory
 `timescale 1ns / 1ps
 
-module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
+module instr_mem #(parameter rom_size = 512, parameter instr_width = 9)
 (
   input [$clog2(rom_size):0] instr_addr,
-  output [$clog2(rom_size):0] instr_out
+  output [instr_width-1:0] instr_out
   );
 
   // Store instructions in memory
@@ -52,7 +52,7 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
   assign rom[37] = 'b001011000;
   assign rom[38] = 'b000010001;
   assign rom[39] = 'b000001111;
-  assign rom[40] = 'b110001011;
+  assign rom[40] = 'b110001101;
   assign rom[41] = 'b011000000;
   assign rom[42] = 'b011101000;
   assign rom[43] = 'b101100101;
@@ -175,7 +175,42 @@ module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
   assign rom[160] = 'b001001010;
   assign rom[161] = 'b001001010;
   assign rom[162] = 'b001001000;
-  assign rom[163] = 'b111000000;
+  assign rom[163] = 'b001001010;
+  assign rom[164] = 'b001111000;
+  assign rom[165] = 'b001100010;
+  assign rom[166] = 'b101000011;
+  assign rom[167] = 'b111000110;
+  assign rom[168] = 'b111110110;
+  assign rom[169] = 'b101001111;
+  assign rom[170] = 'b000111010;
+  assign rom[171] = 'b101110110;
+  assign rom[172] = 'b101010001;
+  assign rom[173] = 'b010111100;
+  assign rom[174] = 'b101010111;
+  assign rom[175] = 'b010001101;
+  assign rom[176] = 'b101010100;
+  assign rom[177] = 'b010011110;
+  assign rom[178] = 'b011000000;
+  assign rom[179] = 'b101000011;
+  assign rom[180] = 'b001000110;
+  assign rom[181] = 'b001000110;
+  assign rom[182] = 'b001000110;
+  assign rom[183] = 'b001000110;
+  assign rom[184] = 'b001000110;
+  assign rom[185] = 'b001000110;
+  assign rom[186] = 'b001000110;
+  assign rom[187] = 'b001010100;
+  assign rom[188] = 'b001000110;
+  assign rom[189] = 'b001100100;
+  assign rom[190] = 'b001100010;
+  assign rom[191] = 'b101000011;
+  assign rom[192] = 'b111010110;
+  assign rom[193] = 'b111100110;
+  assign rom[194] = 'b101001111;
+  assign rom[195] = 'b000101010;
+  assign rom[196] = 'b101101110;
+  assign rom[197] = 'b111000000;
+
 
 
 endmodule

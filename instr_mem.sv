@@ -1,10 +1,10 @@
 // A synchronous instruction memory
 `timescale 1ns / 1ps
 
-module instr_mem #(parameter rom_size = 256, parameter instr_width = 9)
+module instr_mem #(parameter rom_size = 512, parameter instr_width = 9)
 (
   input [$clog2(rom_size):0] instr_addr,
-  output [$clog2(rom_size):0] instr_out
+  output [instr_width-1:0] instr_out
   );
 
   // Store instructions in memory

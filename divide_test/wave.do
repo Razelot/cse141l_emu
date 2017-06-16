@@ -1,5 +1,6 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+add wave -noupdate -radix unsigned /division_tb/DUT/IF/pc_out
 add wave -noupdate /division_tb/DUT/IF/instr_out
 add wave -noupdate /division_tb/DUT/REG/rt_addr
 add wave -noupdate /division_tb/DUT/REG/rs_addr
@@ -11,8 +12,9 @@ add wave -noupdate /division_tb/DUT/REG/rs_out
 add wave -noupdate /division_tb/DUT/REG/rd_out
 add wave -noupdate -expand /division_tb/DUT/REG/core
 add wave -noupdate /division_tb/DUT/REG/allow_write
+add wave -noupdate -expand /division_tb/DUT/IF/ROM/rom
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {212304 ps} 0}
+WaveRestoreCursors {{Cursor 1} {139904 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 207
 configure wave -valuecolwidth 100
@@ -28,4 +30,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {2064061382 ps} {2064128349 ps}
+WaveRestoreZoom {247752 ps} {314719 ps}
