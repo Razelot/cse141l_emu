@@ -97,6 +97,7 @@ sw 5 2 //M[2] = 2
 
 /*Loop Setup. Clear all registers.*/
 addi 8 0 0 //r8 = 0
+addi 9 0 0
 addi 10 0 0
 addi 11 0 0
 addi 12 0 0
