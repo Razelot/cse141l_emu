@@ -154,7 +154,7 @@ lw 5 1 //r5 = MSB(mask)
 inc 1
 lw 6 1 //r6 = LSB(mask)
 
-/*Shift mask left by 15-i*/
+//Shift mask left by 15-i*/
 tr 1 9 //r1 = 15-i
 sll 5 1 //r5 = MSB(mask) << 15-i
 sll 6 1
@@ -163,8 +163,8 @@ tr 2 12
 or 6 2
 tr 6 11 //r6 = LSB(mask) << 15-i
 
-/*Load MSB of dividend from M[128]
-  Load LSB of dividend from M[129]*/
+//Load MSB of dividend from M[128]
+//Load LSB of dividend from M[129]*/
 addi 8 0 0
 tr 1 8
 tr 5 8
@@ -182,7 +182,7 @@ lw 4 2 //r4 = MSB(dividend)
 inc 2
 lw 7 2 //r7 = LSB(dividend)
 
-/*AND dividend with mask.*/
+//AND dividend with mask.*/
 tr 1 5 //r1 = MSB(mask) << 15-i
 and 4 1
 tr 5 11 //r5 = MSB(mask) & MSB(dividend)
@@ -190,8 +190,8 @@ tr 2 6 //r2 = LSB(mask) << 15-i
 and 7 2
 tr 6 11 //r6 = LSB(mask) & LSB(dividend)
 
-/*Shift result right by 15-i to get
-  dividend_temp.*/
+//Shift result right by 15-i to get
+//dividend_temp.*/
 tr 1 9 //r1 = 15-i
 srl 6 1
 srl 5 1 //r5 = MSB(dividend_temp)
@@ -199,8 +199,8 @@ tr 2 12
 or 6 2
 tr 6 11 //r6 = LSB(dividend_temp)
 
-/*Load MSB(div_temp) from M[9].
-  Load LSB(div_temp) from M[10]*/
+//Load MSB(div_temp) from M[9].
+//Load LSB(div_temp) from M[10]*/
 addi 8 0 0
 tr 2 8
 inc 2
@@ -226,12 +226,12 @@ lw 4 2 //r4 = MSB(div_temp
 
 //beq: div_temp < divisor*/
 
-/*Write MSB(div_temp) to M[9]
-  Write LSB(div_temp) to M[10]*/
+//Write MSB(div_temp) to M[9]
+//Write LSB(div_temp) to M[10]*/
 
-/*beq: i < 16*/
-/*beq: i >= 16*/
-/*END LOOP*/
+//beq: i < 16*/
+//beq: i >= 16*/
+//END LOOP*/
 
 //Load M1. Load M2. Subtract and check*/
 
