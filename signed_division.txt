@@ -91,7 +91,7 @@ tr 1 9 //r1 = ~divsor+1
 sw 4 1 //M[130] = ~divisor+1
 inc 2 //r2 = 2
 inc 5 //r5 = 2
-sw 2 5 //M[2] = 2
+sw 5 2 //M[2] = 2
 
 /*beq: Divisor is Positive. Do nothing.*/
 
