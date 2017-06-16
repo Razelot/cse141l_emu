@@ -1,6 +1,75 @@
-/*Loads the MSB of the dividend into
-  r5*/
-addi 8 0 0 //r8 = 0
+/*Load MSB of dividend*/
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1 //r1 = 7
+inc 5
+sll 5 1
+tr 2 5 //r2 = 128
+lw 5 2 //r5 = MSB(dividend)
+
+/*Check if MSB of dividend is negative*/
+add 5 0 8 //r8 = MSB(dividend)
+tr 6 8
+sll 6 1 //r6 = 0/1
+tr 3 6
+beq 3 9
+jr 2 //if r3 != r9
+jr 22 //if r3 == r9
+
+/*beq: Dividend is Negative. Load LSB of
+  dividend from M[129]. NOT it. Add 1.
+  Not MSB. Add carry bit.*/
+add 4 2 9
+inc 9
+tr 3 9
+lw 7 3
+not 7
+inc 7 //r7 = ~LSB(dividend)+1
+tr 3 12 //r3 = carry
+not 5 //r5 = ~MSB(dividend)
+add 5 3 9 //r9 = ~MSB(dividend)+carry
+
+/*beq: Dividend is Negative. Write
+  M[128] with MSB. Write M[129] with
+  LSB. Write M[1] with negative flag*/
+add 4 2 8 //r8 = 128
+tr 5 8
+tr 1 9 //r1 = ~MSB(dividend)+carry
+sw 5 1 //M[128] = MSB(dividend)
+inc 5 //r5 = 129
+tr 1 7 //r1 = ~LSB(dividend)+1
+sw 5 1 //M[129] = LSB(dividend)
+inc 4 //r4 = 1
+addi 8 0 0
+inc 8 //r8 = 1
+tr 2 8 //r2 = 1
+sw 4 2 //M[1] = 1
+
+/* beq: Dividend is Positive. Do nothing.
+
+/*Load divisor from M[130]. Check if
+  divisor is negative*/
+inc 2
+inc 2 //r2 = 130
+lw 5 2 //r5 = M[130]
+addi 8 0 0 /r8 = 0
+tr 3 8 //r3 = 0
+add 5 3 9 //r9 = divisor
+tr 6 9
+sll 6 1 //r6 = 0/1
+tr 2 6 //r2 = 0/1
+beq 2 8
+jr 2 //if r2 != r8
+jr 24 //if r2 == r8
+
+/*beq: Divisor is Negative. NOT the
+  divisor. Add 1. Store in M[130]. Store
+  M[2] with negative flag.*/
+addi 8 0 0
 tr 1 8
 inc 1
 inc 1
@@ -9,52 +78,129 @@ inc 1
 inc 1
 inc 1
 inc 1 //r1 = 7
+inc 8
+tr 2 8
 tr 5 8
-inc 5
-sll 5 1 //r5 = 128
-lw 5 3 //r3 = MSB(dividend)
+tr 4 8
+sll 4 1
+inc 4
+inc 4 //r4 = 130
+not 9
+inc 9 //r9 = ~divisor+1
+tr 1 9 //r1 = ~divsor+1
+sw 4 1 //M[130] = ~divisor+1
+inc 2 //r2 = 2
+inc 5 //r5 = 2
+sw 5 2 //M[2] = 2
 
-/*Checks if MSB of dividend is
-  negative*/
-tr 4 8 //r4 = 0
-add 4 3 9 //r9 = MSB(dividend)
-tr 6 9
-srl 6 1 //r6 = 0/1
-tr 2 6 //r2 = 0/1
-beq 2 8
-jr 2 //if r2 != r8
-jr //if r2 == r8
-
-/*beq: r2 == 1. Load LSB of dividend.
-  NOT it. Add 1.*/
-tr 8 5
-addi 8 0 1
-tr 3 8 //r3 = 129
-lw 7 3
-not 7 //r7 = ~LSB(dividend)
-tr 8 7
-addi 8 0 1 //r8 = ~LSB(dividend)+1
-tr 1 12 //r1 = overflow
-
-/*beq: r2 == 1. NOT MSB of dividend.
-  Adds carry over from LSB.
-not 9 //r9 = ~MSB(dividend)
-tr 7 9 //r7 = ~MSB(dividend)
-add 7 1 9 //r9 = ~MSB(dividend)+carry
-
-/*beq: r2 == 1. Write M[128] with pos
-  value. Write M[1] with neg flag*/
-
-/* beq: r2 == 0.
-
-/*Checks if MSB of divisor is neg*/
-
-/*beq: == 1. NOT the divisor. Add 1.
-
-/*beq: == 1. Write M[130] with pos
-  divisor. Write M[2] with neg flag*/
-
-/*beq: == 0.
+/*beq: Divisor is Positive. Do nothing.*/
 
 /*Loop Setup. Clear all registers.*/
+addi 8 0 0 //r8 = 0
+addi 9 0 0
+addi 10 0 0
+addi 11 0 0
+tr 1 8
+tr 2 8
+tr 3 8
+tr 4 8
+tr 5 8
+tr 6 8
+tr 7 8
+
+/*Loop Setup. Initialize memory:
+  M[3] = i
+  M[4] = 16
+  M[5] = MSB(mask)
+  M[6] = LSB(mask)
+  M[7] = MSB(quotient)
+  M[8] = LSB(quotient)
+*/
+inc 5
+inc 5
+inc 5
+sw 5 0 //M[3] = 0 (initial i)
+inc 6
+inc 1
+inc 1
+inc 1
+inc 1
+sll 6 1 //r6 = 16
+tr 1 6 //r1 = 16
+inc 5
+sw 5 1 //M[4] = 16 (loop stop)
+inc 5
+sw 5 0 //M[5] = 0 (MSB of mask)
+inc 5
+inc 2 //r2 = 1
+sw 5 2 //M[6] = 1 (LSB of mask)
+inc 5
+sw 5 0 //M[6] = 0 (MSB quotient)
+inc 5 //r5 = 8
+sw 5 0 //M[8] = 0 (LSB quotient)
+
+/*BEGIN LOOP. Load i value. Calculate
+  15-i.*/
+addi 8 0 0 //r8 = 0(reset)
+inc 8
+inc 8
+inc 8
+tr 5 8
+tr 3 8
+lw 6 3 //r6 = i
+add 5 3 8
+tr 5 8 //r5 = 6
+tr 3 8 //r3 = 6
+add 5 3 8
+inc 8
+inc 8
+inc 8 //r8 = 15
+tr 7 8 //r7 = 15
+tr 2 6 //r2 = i
+sub 7 2 9 //r9 = 15-i
+
+/*Load MSB of mask from M[5].
+  Load LSB of mask from M[6]*/
+addi 8 0 0
+tr 1 8
+inc 1
+lw 5 1
+inc 1
+lw 6 1
+/*Shift mask by 15-i*/
+sll 7 1 // MSB
+sll 6 1 // LSB
+tr 2 12
+or 7 2
+tr 7 11
+
+/*Load dividend. AND with mask.*/
+
+/*Shift result by 15-i to get
+  dividend_temp.*/
+
+/*Load div_temp from M[9].*/
+
+/*Shift div_temp left 1. Add with
+  dividend_temp.*/
+
+/*Load MSB quotient. Load LSB quotient.
+  Shift everything left 1.*/
+
+/*Load divisor. Compare with div_temp*/
+
+/*beq: div_temp >= divisor*/
+
+/*beq: div_temp < divisor*/
+
+/*END LOOP*/
+
+/*Load M1. Load M2. Subtract and check*/
+
+/*beq: Result is negative. Twos comp*/
+
+/*beq: Result is positive. Write MSB
+  of quotient to M[126]. Write LSB of
+  quotient to M[127].
+
 halt

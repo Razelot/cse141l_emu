@@ -9,12 +9,12 @@ int division(int dividend_arg, char divisor_arg)
     int isNeg = 0;
 
     // Convert to positive values for computation, set neg flag
-    if(dividend >> 15 == -1) //arithmetic right shift
+    if(dividend < 0)
     {
         dividend = ~dividend + 1;
         isNeg = 1;
     }
-    if(divisor >> 7 == -1) //arithmetic right shift
+    if(divisor < 0)
     {
         divisor = ~divisor + 1;
         isNeg = (isNeg==1) ? 0:1;
