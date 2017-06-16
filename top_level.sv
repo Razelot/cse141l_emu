@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_width = 4) (
+module top_level #(parameter num_regs = 12, rom_size = 512, instr_width = 9, reg_width = 8, op_width = 4) (
   input     clk,
   input     start,
   output    done);
@@ -24,7 +24,7 @@ module top_level #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_w
   wire [7:0] mem_out;
 
   logic[15:0] instr_count;
-  logic[instr_width-1:0] start_addr;
+  logic[$clog2(rom_size):0] start_addr;
 
   // MUX
   wire [reg_width-1:0] rb_in, rd_in;

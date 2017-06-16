@@ -1,17 +1,17 @@
 `timescale 1ns / 1ps
 
-module prog_counter #(parameter instr_width = 9, reg_width = 8)
+module prog_counter #(parameter  rom_size = 512, instr_width = 9, reg_width = 8)
 (
   input clk,
   input start,
-  input [instr_width-1:0] start_addr,
+  input [$clog2(rom_size):0] start_addr,
   input branch,
   input taken,
   input signed [reg_width-1:0] target,
-  output [instr_width-1:0] pc_out
+  output [$clog2(rom_size):0] pc_out
   );
 
-  reg [instr_width-1:0] pc;
+  reg [$clog2(rom_size):0] pc;
 
   assign pc_out = pc;
 
