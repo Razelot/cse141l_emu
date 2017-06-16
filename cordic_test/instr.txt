@@ -1,26 +1,48 @@
-// r4 = i
-// calc xnew
-inc 1 // r1 = 1
-lw 5 1 // r5 = xtemp1
+// r1 = i
+// CALC XNEW
+inc 3 // r3 = 1
+inc 3 // r3 = 2
+inc 3 // r3 = 3
+lw 6 3 // r6 = ytemp1
+inc 3 // r3 = 4
+lw 7 3 // r7 = ytemp0
+// reset count to get x
+addi 11 0 0
+tr 3 11 // r3 = 0
+inc 3 // r3 = 1
+lw 5 3
 tr 2  5 // r2 = xtemp1
-inc 1 // r1 = 2
-lw 5 1 // r5 = xtemp0
+inc 3 // r3 = 2
+lw 5 3
 tr 3 5 // r3 = xtemp0
-
-// r5 is junk
-inc 1 // r1 = 3
-lw 6 1 // r6 = ytemp1
-inc 1 // r1 = 4
-lw 7 1 // r7 = ytemp0
-
+// OK
 // check if ytemp is negative
 slt 6 0 // ytemp1 negative?
 beq 0 11 // if ytemp1 < 0: r11 = 0
-jr 5 // go to positive loop
-// negative loop
+jr 7 // go to addition
+// NEGATIVE: invert y
+// calc xnew
+not 6 // invert ytemp1
+not 7 // invert ytemp0
+inc 7
+tr 2 12
+add 6 2 11 // add overflow, r5 is junk
+tr 6 11
+// POSITIVE: keep y
+srl 7 1 // ytemp0 >> i
+sra 6 1 // ytemp1 >>> i
+tr 2 12
+or 7 2
+tr 7 11 // ytemp0 with carry bits
+// XNEW = XTEMP + YTEMP_SHIFTED
+// check if ytemp is negative
+slt 6 0 // ytemp1 negative?
+beq 0 11 // if ytemp1 < 0: r11 = 0
+jr X // go to add
+// sub
 
-inc 1
-inc 1
-inc 1
-inc 1
+add 7 3
+inc 2
+inc 2
+inc 2
 halt
