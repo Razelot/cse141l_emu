@@ -91,7 +91,7 @@ tr 1 9 //r1 = ~divsor+1
 sw 4 1 //M[130] = ~divisor+1
 inc 2 //r2 = 2
 inc 5 //r5 = 2
-sw 5 2 //M[2] = 2
+sw 5 2 //M[2] = 1
 
 /*beq: Divisor is Positive. Do nothing.*/
 
@@ -115,6 +115,8 @@ tr 7 8
   M[6] = LSB(mask)
   M[7] = MSB(quotient)
   M[8] = LSB(quotient)
+  M[9] = MSB(div_temp)
+  M[10] = LSB(div_temp)
 */
 inc 5
 inc 5
@@ -138,6 +140,10 @@ inc 5
 sw 5 0 //M[6] = 0 (MSB quotient)
 inc 5 //r5 = 8
 sw 5 0 //M[8] = 0 (LSB quotient)
+inc 5
+sw 5 0 //M[9] = 0 MSB(div_temp)
+inc 5
+sw 5 0 //M[10] = 0 LSB(div_temp)
 
 /*BEGIN LOOP. Load i value. Calculate
   15-i.*/
@@ -164,22 +170,72 @@ sub 7 2 9 //r9 = 15-i
 addi 8 0 0
 tr 1 8
 inc 1
-lw 5 1
 inc 1
-lw 6 1
-/*Shift mask by 15-i*/
-sll 7 1 // MSB
-sll 6 1 // LSB
+inc 1
+inc 1
+inc 1
+lw 5 1 //r5 = MSB(mask)
+inc 1
+lw 6 1 //r6 = LSB(mask)
+
+/*Shift mask left by 15-i*/
+tr 1 9 //r1 = 15-i
+sll 5 1 //r5 = MSB(mask) << 15-i
+sll 6 1
 tr 2 12
-or 7 2
-tr 7 11
+or 6 2
+tr 6 11 //r6 = LSB(mask) << 15-i
 
-/*Load dividend. AND with mask.*/
+/*Load MSB of dividend from M[128]
+  Load LSB of dividend from M[129]*/
+addi 8 0 0
+tr 1 8
+tr 5 8
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1 //r1 = 7
+inc 5
+sll 5 1
+tr 2 5 //r2 = 128
+lw 4 2 //r4 = MSB(dividend)
+inc 2
+lw 7 2 //r7 = LSB(dividend)
 
-/*Shift result by 15-i to get
+/*AND dividend with mask.*/
+tr 1 5 //r1 = MSB(mask) << 15-i
+and 4 1
+tr 5 11 //r5 = MSB(mask) & MSB(dividend)
+tr 2 6 //r2 = LSB(mask) << 15-i
+and 7 2
+tr 6 11 //r6 = LSB(mask) & LSB(dividend)
+
+/*Shift result right by 15-i to get
   dividend_temp.*/
+tr 1 9 //r1 = 15-i
+srl 6 1
+srl 5 1 //r5 = MSB(dividend_temp)
+tr 2 12
+or 6 2
+tr 6 11 //r6 = LSB(dividend_temp)
 
-/*Load div_temp from M[9].*/
+/*Load MSB(div_temp) from M[9].
+  Load LSB(div_temp) from M[10]*/
+addi 8 0 0
+tr 2 8
+inc 2
+inc 2
+inc 2
+inc 2
+inc 2
+inc 2
+inc 2
+inc 2
+inc 2 //r2 = 9
+lw 4 2 //r4 = MSB(div_temp
 
 /*Shift div_temp left 1. Add with
   dividend_temp.*/
@@ -193,6 +249,11 @@ tr 7 11
 
 /*beq: div_temp < divisor*/
 
+/*Write MSB(div_temp) to M[9]
+  Write LSB(div_temp) to M[10]*/
+
+/*beq: i < 16*/
+/*beq: i >= 16*/
 /*END LOOP*/
 
 /*Load M1. Load M2. Subtract and check*/
