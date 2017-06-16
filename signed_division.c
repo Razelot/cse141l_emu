@@ -28,7 +28,7 @@ int division(int dividend_arg, char divisor_arg)
         div_temp = (div_temp << 1) + dividend_temp;
 
         quotient = quotient << 1;
-        if(div_temp >= divisor)
+        if(div_temp >= divisor)//16bit >= 8bit
         {
             div_temp = div_temp - divisor;
             quotient += 1;

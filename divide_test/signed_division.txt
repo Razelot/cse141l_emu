@@ -48,7 +48,7 @@ sw 4 2 //M[1] = 1
 // beq: Dividend is Positive. Do nothing.
 
 //Load divisor from M[130]. Check if
-//divisor is negative*/
+//divisor is negative
 inc 2
 inc 2 //r2 = 130
 lw 5 2 //r5 = M[130]
@@ -58,7 +58,7 @@ jr 11 // Divisor is positive, skip negative block
 
 //beq: Divisor is Negative. NOT the
 //divisor. Add 1. Store in M[130]. Store
-//M[2] with negative flag.*/
+//M[2] with negative flag.
 addi 8 0 0
 inc 8
 tr 5 8 // r5 = 1
@@ -70,9 +70,9 @@ sw 2 1 //M[130] = ~divisor+1
 inc 5 //r5 = 2
 sw 5 4 //M[2] = 1
 
-//beq: Divisor is Positive. Do nothing.*/
+//beq: Divisor is Positive. Do nothing.
 
-//Loop Setup. Clear all registers.*/
+//Loop Setup. Clear all registers.
 addi 8 0 0 //r8 = 0
 addi 9 0 0
 addi 10 0 0
@@ -93,7 +93,8 @@ tr 7 8
 //M[6] = LSB(mask)
 //M[7] = MSB(quotient)
 //M[8] = LSB(quotient)
-
+//M[9] = MSB(div_temp)
+//M[10] = LSB(div_temp)
 inc 5
 inc 5
 inc 5
@@ -122,7 +123,7 @@ inc 5
 sw 5 0 //M[10] = 0 LSB(div_temp)
 
 //BEGIN LOOP. Load i value. Calculate
-//15-i.*/
+//15-i.
 addi 8 0 0 //r8 = 0(reset)
 inc 8
 inc 8
@@ -141,8 +142,8 @@ tr 7 8 //r7 = 15
 tr 2 6 //r2 = i
 sub 7 2 9 //r9 = 15-i
 
-//Load MSB of mask from M[5].
-//Load LSB of mask from M[6]*/
+//Load MSB of mask from M[5]
+//Load LSB of mask from M[6]
 addi 8 0 0
 tr 1 8
 inc 1
@@ -154,7 +155,7 @@ lw 5 1 //r5 = MSB(mask)
 inc 1
 lw 6 1 //r6 = LSB(mask)
 
-//Shift mask left by 15-i*/
+//Shift mask left by 15-i
 tr 1 9 //r1 = 15-i
 sll 5 1 //r5 = MSB(mask) << 15-i
 sll 6 1
@@ -164,7 +165,7 @@ or 6 2
 tr 6 11 //r6 = LSB(mask) << 15-i
 
 //Load MSB of dividend from M[128]
-//Load LSB of dividend from M[129]*/
+//Load LSB of dividend from M[129]
 addi 8 0 0
 tr 1 8
 tr 5 8
@@ -182,7 +183,7 @@ lw 4 2 //r4 = MSB(dividend)
 inc 2
 lw 7 2 //r7 = LSB(dividend)
 
-//AND dividend with mask.*/
+//AND dividend with mask.
 tr 1 5 //r1 = MSB(mask) << 15-i
 and 4 1
 tr 5 11 //r5 = MSB(mask) & MSB(dividend)
@@ -191,7 +192,7 @@ and 7 2
 tr 6 11 //r6 = LSB(mask) & LSB(dividend)
 
 //Shift result right by 15-i to get
-//dividend_temp.*/
+//dividend_temp.
 tr 1 9 //r1 = 15-i
 srl 6 1
 srl 5 1 //r5 = MSB(dividend_temp)
@@ -211,20 +212,63 @@ inc 2
 inc 2
 inc 2
 inc 2
-inc 2 //r2 = 9
-lw 4 2 //r4 = MSB(div_temp
+inc 2
+lw 4 2 //r4 = MSB(div_temp)
+inc 2
+lw 7 2 //r7 = LSB(div_temp)
 
-//Shift div_temp left 1. Add with
-//dividend_temp.*/
+//Shift div_temp left 1.
+inc 8
+tr 1 8 //r1 = 1
+sll 4 1 //r4 = MSB(div_temp) << 1
+sll 7 1
+tr 2 12
+or 7 2
+tr 7 11 //r7 = LSB(div_temp) << 1
 
-//Load MSB quotient. Load LSB quotient.
-//Shift everything left 1.*/
+//Add LSB(div_temp)+LSB(dividend_temp)
+//Add carry+MSB(div_temp)
+//Add MSB(div_temp)+MSB(dividend_temp)
+tr 3 6
+add 7 3 8 //r8 = LSB(div_temp)
+tr 3 12
+add 4 3 9
+tr 3 9
+add 5 3 10 //r10 = MSB(div_temp)
 
-//Load divisor. Compare with div_temp*/
+//Write MSB(div_temp) to M[9]
+//Write LSB(div_temp) to M[10]
 
-//beq: div_temp >= divisor*/
+//Load MSB of quotient from M[7]
+//Load LSB of quotient from M[8]
+addi 8 0 0
+tr 1 8
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+lw 5 1 //r5 = MSB(quotient)
+inc 1
+lw 6 1 //r6 = LSB(quotient)
 
-//beq: div_temp < divisor*/
+//Shift quotient left 1.
+inc 8
+tr 1 8 //r1 = 1
+sll 5 1 //r5 = MSB(quotient) << 1
+sll 6 1
+tr 2 12
+or 6 2
+tr 6 11 //r6 = LSB(quotient) << 1
+
+//Load divisor from M[130]
+//Compare with div_temp
+
+//beq: div_temp >= divisor
+
+//beq: div_temp < divisor
 
 //Write MSB(div_temp) to M[9]
 //Write LSB(div_temp) to M[10]*/
