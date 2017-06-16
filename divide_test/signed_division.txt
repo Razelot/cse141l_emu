@@ -238,27 +238,26 @@ add 4 3 9
 tr 3 9
 add 5 3 10 //r10 = MSB(div_temp)
 
-//Write MSB(div_temp) to M[9]
-//Write LSB(div_temp) to M[10]
-
 //Load MSB of quotient from M[7]
 //Load LSB of quotient from M[8]
-addi 8 0 0
-tr 1 8
-inc 1
-inc 1
-inc 1
-inc 1
-inc 1
-inc 1
-inc 1
+addi 9 0 0
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+tr 3 9 //r3 = 7
+tr 1 9
 lw 5 1 //r5 = MSB(quotient)
-inc 1
+inc 1 //r1 = 8
 lw 6 1 //r6 = LSB(quotient)
 
 //Shift quotient left 1.
-inc 8
-tr 1 8 //r1 = 1
+addi 9 0 0
+inc 9
+tr 1 9 //r1 = 1
 sll 5 1 //r5 = MSB(quotient) << 1
 sll 6 1
 tr 2 12
@@ -266,14 +265,46 @@ or 6 2
 tr 6 11 //r6 = LSB(quotient) << 1
 
 //Load divisor from M[130]
-//Compare with div_temp
+addi 9 0 0
+inc 9
+tr 7 9
+sll 7 1
+inc 7
+inc 7 //r7 = 130
+tr 2 7 //r2 = 130
+lw 4 2 //r4 = divisor
 
-//beq: div_temp >= divisor
+//Check if MSB(div_temp) > 0
+tr 7 10
+not 7
+inc 7
+slt 7 0
+tr 7 11 //r7 = 1 if MSB(div_temp) > 0
+beq 0 7
+jr 2
+jr 12
+
+//beq: div_temp >= divisor.
+//LSB(div_temp) = LSB(div_temp) - divisor
+//MSB(div_temp) = MSB(div_temp) - underflow
+//Increment quotient
+tr 7 8
+add 4 0 11
+tr 1 11 //r1 = divisor
+sub 7 1 11 //r11 = LSB(div_temp)
+tr 1 12 //r1 = underflow
+tr 7 10
+sub 7 1 9 //r9 = MSB(div_temp)
+inc 6 //r6 = LSB(quotient)+1
+tr 1 12 //r1 = carry
+add 5 1 7 //r7 = MSB(quotient)+1
+jr (div_temp < divisor)
+
+//Check if LSB(div_temp) >= divisor
 
 //beq: div_temp < divisor
-
 //Write MSB(div_temp) to M[9]
-//Write LSB(div_temp) to M[10]*/
+//Write LSB(div_temp) to M[10]
 
 //beq: i < 16*/
 //beq: i >= 16*/
