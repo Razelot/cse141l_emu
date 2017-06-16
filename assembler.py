@@ -138,7 +138,10 @@ if __name__ == "__main__":
                 rs = int(line.split()[1]) - 4
                 rt = int(line.split()[2])
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
-            print "assign rom[" + str(i) + "] = 'b" + mach + ";"
-            if(len(sys.argv) > 3):
-                print line
+
+            if(len(sys.argv) > 2):
+                print "assign rom[" + str(i) + "] = 'b" + mach + "; | " + line[:len(line)-1]
+            else:
+                print "assign rom[" + str(i) + "] = 'b" + mach + ";"
+
             i = i + 1

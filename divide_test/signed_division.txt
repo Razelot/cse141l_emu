@@ -54,21 +54,23 @@ inc 2 //r2 = 130
 lw 5 2 //r5 = M[130]
 slt 5 0 // Divisor negative?
 beq 0 11 // if Divisor < 0: r11 = 0
-jr 11 // Divisor is positive, skip negative block
+jr 13 // Divisor is positive, skip negative block
 
 //beq: Divisor is Negative. NOT the
 //divisor. Add 1. Store in M[130]. Store
 //M[2] with negative flag.
 addi 8 0 0
-inc 8
-tr 5 8 // r5 = 1
-tr 4 8 // r4 = 1
+addi 10 2 0 // r10 = 130
+tr 5 10 // r5 = 130
 not 9
 inc 9 // r9 = ~divisor+1
 tr 1 9 // r1 = ~divsor+1
-sw 2 1 //M[130] = ~divisor+1
+sw 5 1 //M[130] = ~divisor+1
+inc 8
+tr 3 8 // r3 = 1
+tr 5 8 // r5 = 1
 inc 5 //r5 = 2
-sw 5 4 //M[2] = 1
+sw 5 3 //M[2] = 1
 
 //beq: Divisor is Positive. Do nothing.
 
