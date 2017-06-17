@@ -282,54 +282,137 @@ slt 7 0
 tr 7 11 //r7 = 1 if MSB(div_temp) > 0
 beq 0 7
 jr 2
-jr 12
+jr 13
 
 //beq: div_temp >= divisor.
 //LSB(div_temp) = LSB(div_temp) - divisor
 //MSB(div_temp) = MSB(div_temp) - underflow
 //Increment quotient
 tr 7 8
-add 4 0 11
-tr 1 11 //r1 = divisor
-sub 7 1 11 //r11 = LSB(div_temp)
-tr 1 12 //r1 = underflow
+add 4 0 11 //r11 = divisor
+tr 1 11
+sub 7 1 8 //r8 = LSB(div_temp)
+tr 1 12
 tr 7 10
-sub 7 1 9 //r9 = MSB(div_temp)
+sub 7 1 10 //r10 = MSB(div_temp)
 inc 6 //r6 = LSB(quotient)+1
-tr 1 12 //r1 = carry
-add 5 1 7 //r7 = MSB(quotient)+1
-jr (div_temp < divisor)
+tr 1 12
+add 5 1 11
+tr 5 11 //r5 = MSB(quotient)+1
+jr 6
 
 //Check if LSB(div_temp) >= divisor
 tr 3 8 //r3 = LSB(div_temp)
 slt 4 3
 tr 7 11 //r1 = 1 if divisor < LSB(div_temp)
 beq 7 0
-jr -15
+jr -16
 
 //beq: div_temp < divisor. Do nothing.
 
 //Loop Cleanup:
-//Write MSB(quotient) to M[7]
-//Write LSB(quotient) to M[8]
-//Write MSB(div_temp) to M[9]
-//Write LSB(div_temp) to M[10]
+//M[7] = MSB(quotient)
+//M[8] = LSB(quotient)
+//M[9] = MSB(div_temp)
+//M[10] = LSB(div_temp)
+addi 9 0 0
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+inc 9
+tr 4 9 //r4 = 7
+tr 1 5 //r1 = Val to store
+sw 4 1 //M[7] = MSB(quotient)
+inc 4
+tr 1 6
+sw 4 1 //M[8] = LSB(quotient)
+inc 4
+tr 1 10
+sw 4 1 //M[9] = MSB(div_temp)
+inc 4
+tr 1 8
+sw 4 1 //M[10] = LSB(div_temp)
 
-tr 1 5
-sw  1
-tr  6
-sw  6
+//Load i from M[3]. Increment i.
+//Load 16 from M[4]. Check if i < 16.
+addi 8 0 0
+tr 1 8
+inc 1
+inc 1
+inc 1
+lw 4 1 //r4 = i
+inc 4
+inc 1
+lw 5 1
+tr 3 5 //r3 = 16
+slt 4 3
+tr 8 11 //r8 = 1 if i < 16
+beq 0 8
+jr -31
 
-//beq: i < 16*/
-//beq: i >= 16*/
-//END LOOP*/
+//beq: i >= 16. END LOOP
 
-//Load M1. Load M2. Subtract and check*/
+//Load negative flags from M[1] and M[2]
+//Load MSB(quotient) from M[7]
+//Load LSB(quotient) from M[8]
+addi 8 0 0
+tr 1 8
+inc 1
+lw 6 1 //r6 = dividend neg flag
+inc 1
+lw 5 1 //r5 = divisor neg flag
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+lw 4 1 //r4 = MSB(quotient)
+inc 1
+lw 7 1 //r7 = LSB(quotient)
 
-//beq: Result is negative. Twos comp*/
+//Subtract flags. Check if result == 0
+tr 1 6
+sub 5 1 8
+beq 0 8
+jr 2
+jr 6
 
-//beq: Result is positive. Write MSB
-//of quotient to M[126]. Write LSB of
-//quotient to M[127].
+//beq: Result is negative
+//NOT LSB(quotient). Increment.
+//NOT MSB(quotient). Add with carry.
+not 7
+inc 7 //r7 = ~LSB(quotient)+1
+tr 3 12 //r3 = carry
+not 4
+add 4 3 9 //r9 = ~MSB(quotient)+1
+
+//beq: Result is positive
+//Write MSB(quotient) to M[126]
+//Write LSB(quotient) to M[127]
+addi 8 0 0
+tr 1 8
+tr 5 8
+tr 2 8
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1 //r1 = 7
+inc 5
+inc 2
+inc 2 //r2 = 2
+sll 5 1 //r5 = 128
+sub 5 2 8 //r8 = 126
+tr 4 8 //r4 = 126
+tr 2 9 //r2 = MSB(quotient)
+sw 4 2 //M[126] = MSB(quotient)
+inc 4
+tr 2 7
+sw 4 2 //M[127] = LSB(quotient)
 
 halt
