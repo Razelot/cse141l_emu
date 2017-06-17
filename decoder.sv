@@ -12,7 +12,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
   output logic mem2reg,
   output logic done);
 
-	always_comb	begin
+	always @* begin
     // check op code
  	case(instruction[8:6])
 	  3'b000 :	begin
@@ -307,6 +307,7 @@ module decoder #(parameter num_regs = 12, instr_width = 9, reg_width = 8, op_wid
         endcase
         end
       endcase
+
       end
 
 endmodule
