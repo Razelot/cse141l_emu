@@ -301,10 +301,24 @@ add 5 1 7 //r7 = MSB(quotient)+1
 jr (div_temp < divisor)
 
 //Check if LSB(div_temp) >= divisor
+tr 3 8 //r3 = LSB(div_temp)
+slt 4 3
+tr 7 11 //r1 = 1 if divisor < LSB(div_temp)
+beq 7 0
+jr -15
 
-//beq: div_temp < divisor
+//beq: div_temp < divisor. Do nothing.
+
+//Loop Cleanup:
+//Write MSB(quotient) to M[7]
+//Write LSB(quotient) to M[8]
 //Write MSB(div_temp) to M[9]
 //Write LSB(div_temp) to M[10]
+
+tr 1 5
+sw  1
+tr  6
+sw  6
 
 //beq: i < 16*/
 //beq: i >= 16*/
