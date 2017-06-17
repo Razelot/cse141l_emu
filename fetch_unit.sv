@@ -7,7 +7,7 @@ module fetch_unit #(parameter rom_size = 512, instr_width = 9, reg_width = 8)
   input [$clog2(rom_size):0] start_addr,
   input branch,
   input taken,
-  input [reg_width-1:0] target,
+  input signed [reg_width-1:0] target,
   output [instr_width-1:0] instr_out
   );
 
