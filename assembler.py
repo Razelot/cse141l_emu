@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     infile = sys.argv[1]
     # outfile = sys.argv[2]
-    file = open("output.txt", "write")
+    file = open("./pattern_search_test/output.txt", "write")
     # Fill op codes here
     op_map = {}
     op_map["and"] = "000"
