@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     infile = sys.argv[1]
     # outfile = sys.argv[2]
-
+    file = open("output.txt", "write")
     # Fill op codes here
     op_map = {}
     op_map["and"] = "000"
@@ -140,8 +140,9 @@ if __name__ == "__main__":
                 mach = op + format(rs, '02b') + format(rt, '02b') + subop
 
             if(len(sys.argv) > 2):
-                print "assign rom[" + str(i) + "] = 'b" + mach + "; | " + line[:len(line)-1]
+                file.write("assign rom[" + str(i) + "] = 'b" + mach + "; | " + line[:len(line)-1])
             else:
-                print "assign rom[" + str(i) + "] = 'b" + mach + ";"
+                file.write("assign rom[" + str(i) + "] = 'b" + mach + ";")
 
             i = i + 1
+    file.close()

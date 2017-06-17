@@ -1,0 +1,274 @@
+inc 5
+inc 1
+sll 5 1 //2
+inc 5
+sll 5 1 //3
+inc 5
+sll 5 1 //4
+inc 5
+sll 5 1 //5
+inc 5
+sll 5 1 //6
+inc 5
+sll 5 1 //7
+inc 5
+sll 5 1 //8
+inc 5
+tr 1 5 //r1 = 255
+inc 6
+sw 6 1 //M[1] = 255
+not 1
+inc 1
+inc 1 
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1
+inc 1 //r1 = 9
+inc 2 //r2 = 1
+lw 7 1 //r7 = M[r1] 
+tr 3 7 //r3 = SEQUENCE TO SEARCH
+
+addi 11 1 3 //r11 = 12
+tr 5 11 //r5 = 12
+add 5 1 11 //r11 = 12 + 9 = 21
+tr 5 11 //r5 = 21
+add 5 1 11 //r11 = 21 + 9 = 30
+inc 11 
+inc 11 //r11 = 32
+tr 1 11 //r1 = 32 (STRING ADDRESS)
+
+lw 7 1 //r7 = M[r1] = start of string
+inc 1 // increment STRING ADDRESS
+lw 6 1 //LOAD 2ND BYTE
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+tr 5 7 //5 = 1ST BYTE
+sll 5 2
+sll 5 2	
+sll 5 2
+sll 5 2
+
+srl 5 2
+srl 5 2
+srl 5 2
+srl 5 2 //zero the upper 4 bits
+tr 8 5 //transfer reg 5 to reg 8
+beq 3 8 //check if seq = string   <<<<<<
+jr 2
+inc 10 //if equal INCREMENT COUNTER
+srl 7 2 //shift first byte >> 1
+srl 6 2 //shift 2nd byte >> 1
+tr 2 12 //tranfer cb as msb into 2
+or 7 2 //append cb as msb to first byte
+tr 7 11
+halt
